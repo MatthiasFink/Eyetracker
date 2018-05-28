@@ -1,0 +1,10 @@
+﻿<Window x:Class="EyeTrackingDemo.PresentationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="stimulus presentation" Height="300" Width="300" PreviewKeyUp="Window_PreviewKeyUp">
+	<Grid>
+		<Image x:Name="StimulusPane"/>
+		<Canvas x:Name="FixationPane"/>
+
+	</Grid>
+</Window>
