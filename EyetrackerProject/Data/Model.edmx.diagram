@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="56c1c4fc8bd846ccbab290d3b7cecdae" Name="Diagram1">
+        <EntityTypeShape EntityType="EyetrackerModel.Answer" Width="1.5" PointX="9.625" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="EyetrackerModel.Candidate" Width="1.5" PointX="7.625" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="EyetrackerModel.Choice" Width="1.5" PointX="7.625" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="EyetrackerModel.Question" Width="1.5" PointX="5.25" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="EyetrackerModel.Questionnaire" Width="1.5" PointX="3" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="EyetrackerModel.Settings" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="EyetrackerModel.Slide" Width="1.5" PointX="3" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="EyetrackerModel.Slide_Answer" Width="1.5" PointX="8.125" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="EyetrackerModel.Slide_Choice" Width="1.5" PointX="3" PointY="16.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="EyetrackerModel.Test" Width="1.5" PointX="7.625" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="EyetrackerModel.Test_Definition" Width="1.5" PointX="0.75" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="EyetrackerModel.Tracking" Width="1.5" PointX="5.25" PointY="12.125" IsExpanded="true" />
+        <AssociationConnector Association="EyetrackerModel.FK_Answer_Choice" ManuallyRouted="false" />
+        <AssociationConnector Association="EyetrackerModel.FK_Answer_Question" ManuallyRouted="false" />
+        <AssociationConnector Association="EyetrackerModel.FK_Answer_Test" ManuallyRouted="false" />
+        <AssociationConnector Association="EyetrackerModel.FK_Test_Candidate" ManuallyRouted="false" />
+        <AssociationConnector Association="EyetrackerModel.FK_Choice_Question" ManuallyRouted="false" />
+        <AssociationConnector Association="EyetrackerModel.FK_Question_Questionnaire" ManuallyRouted="false" />
+        <AssociationConnector Association="EyetrackerModel.FK_Questionnaire_Questionnaire" ManuallyRouted="false" />
+        <AssociationConnector Association="EyetrackerModel.FK_Slide_Answer_Slide" ManuallyRouted="false" />
+        <AssociationConnector Association="EyetrackerModel.FK_Slide_Choice_Slide" ManuallyRouted="false" />
+        <AssociationConnector Association="EyetrackerModel.FK_Slide_Test_Definition" ManuallyRouted="false" />
+        <AssociationConnector Association="EyetrackerModel.FK_Tracking_Slide" ManuallyRouted="false" />
+        <AssociationConnector Association="EyetrackerModel.FK_Slide_Answer_Slide_Choice" ManuallyRouted="false" />
+        <AssociationConnector Association="EyetrackerModel.FK_Slide_Answer_Test" ManuallyRouted="true" >
+          <ConnectorPoint PointX="9.125" PointY="7.8185196314102576" />
+          <ConnectorPoint PointX="10.457161325423744" PointY="7.8185196314102567" />
+          <ConnectorPoint PointX="10.623827992090412" PointY="7.8185196314102576" />
+          <ConnectorPoint PointX="11.71875" PointY="7.8185196314102576" />
+          <ConnectorPoint PointX="11.71875" PointY="14.095338879471303" />
+          <ConnectorPoint PointX="9.625" PointY="14.095338879471303" />
+        </AssociationConnector>
+        <AssociationConnector Association="EyetrackerModel.FK_Test_Test_Definition" ManuallyRouted="false" />
+        <AssociationConnector Association="EyetrackerModel.FK_Tracking_Test" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

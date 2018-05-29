@@ -3,3 +3,9 @@
 ################################################################################
 
 /EyetrackerProject/.vs/EyetrackerExperiment/v15
+/EyetrackerProject/Data/obj
+/.vs
+/EyetrackerProject/Demographic_Questionnaire/obj
+/EyetrackerProject/Post_Questionnaire/obj
+/EyetrackerProject/EyeTracking/obj
+/EyetrackerProject/packages/EntityFramework.6.2.0/lib

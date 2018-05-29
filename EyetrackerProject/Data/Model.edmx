@@ -1,0 +1,991 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="EyetrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Answer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="test_id" Type="int" Nullable="false" />
+          <Property Name="question_id" Type="int" Nullable="false" />
+          <Property Name="answer" Type="nvarchar" MaxLength="200" />
+          <Property Name="choice_id" Type="int" />
+          <Property Name="is_correct" Type="bit" />
+          <Property Name="answered" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Candidate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="personal_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="gender" Type="nvarchar" MaxLength="1" Nullable="false" />
+          <Property Name="age_range_low" Type="int" Nullable="false" />
+          <Property Name="age_range_high" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Choice">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="question_id" Type="int" Nullable="false" />
+          <Property Name="num" Type="int" Nullable="false" />
+          <Property Name="shortcut" Type="nvarchar" MaxLength="1" />
+          <Property Name="choice" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="is_correct" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="questionnaire_id" Type="int" Nullable="false" />
+          <Property Name="type_cd" Type="nchar" MaxLength="1" Nullable="false" />
+          <Property Name="num" Type="numeric" Precision="2" Scale="1" Nullable="false" />
+          <Property Name="question" Type="nvarchar" MaxLength="80" Nullable="false" />
+          <Property Name="correct_answer" Type="nvarchar" MaxLength="80" />
+        </EntityType>
+        <EntityType Name="Questionnaire">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Test_Definition_Id" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Help" Type="nvarchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="Settings">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="value" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Slide">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="test_definition_id" Type="int" Nullable="false" />
+          <Property Name="num" Type="int" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="50" />
+          <Property Name="filepath" Type="nvarchar" MaxLength="200" />
+          <Property Name="image" Type="varbinary(max)" />
+          <Property Name="image_mime" Type="nvarchar" MaxLength="50" />
+          <Property Name="duration" Type="int" />
+          <Property Name="is_multiple_choice" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Slide_Answer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="test_id" Type="int" Nullable="false" />
+          <Property Name="slide_id" Type="int" Nullable="false" />
+          <Property Name="slide_choice_id" Type="int" Nullable="false" />
+          <Property Name="slide_start_time" Type="datetime" />
+          <Property Name="slide_end_time" Type="datetime" />
+          <Property Name="answered" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Slide_Choice">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="slide_id" Type="int" Nullable="false" />
+          <Property Name="shortcut" Type="nvarchar" MaxLength="1" Nullable="false" />
+          <Property Name="num" Type="int" Nullable="false" />
+          <Property Name="choice" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Test">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="test_definition_id" Type="int" Nullable="false" />
+          <Property Name="candidate_id" Type="int" Nullable="false" />
+          <Property Name="start_time" Type="datetime" />
+          <Property Name="end_time" Type="datetime" />
+          <Property Name="test_group" Type="nvarchar" MaxLength="50" />
+          <Property Name="comment" Type="nvarchar(max)" />
+          <Property Name="status_cd" Type="nvarchar" MaxLength="3" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Test_Definition">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="language" Type="nchar" MaxLength="2" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Version" Type="smallint" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="test_id" Type="int" Nullable="false" />
+          <Property Name="slide_id" Type="int" Nullable="false" />
+          <Property Name="occurred" Type="datetime" Nullable="false" />
+          <Property Name="x" Type="numeric" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="y" Type="numeric" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="diameter" Type="numeric" Precision="6" Scale="2" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Answer_Choice">
+          <End Role="Choice" Type="Self.Choice" Multiplicity="0..1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Choice">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="choice_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Answer_Question">
+          <End Role="Question" Type="Self.Question" Multiplicity="1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="question_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Answer_Test">
+          <End Role="Test" Type="Self.Test" Multiplicity="1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="test_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Choice_Question">
+          <End Role="Question" Type="Self.Question" Multiplicity="1" />
+          <End Role="Choice" Type="Self.Choice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Choice">
+              <PropertyRef Name="question_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Question_Questionnaire">
+          <End Role="Questionnaire" Type="Self.Questionnaire" Multiplicity="1" />
+          <End Role="Question" Type="Self.Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Questionnaire">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="questionnaire_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Questionnaire_Questionnaire">
+          <End Role="Test_Definition" Type="Self.Test_Definition" Multiplicity="1" />
+          <End Role="Questionnaire" Type="Self.Questionnaire" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test_Definition">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Questionnaire">
+              <PropertyRef Name="Test_Definition_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Slide_Answer_Slide">
+          <End Role="Slide" Type="Self.Slide" Multiplicity="1" />
+          <End Role="Slide_Answer" Type="Self.Slide_Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Slide">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Slide_Answer">
+              <PropertyRef Name="slide_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Slide_Answer_Slide_Choice">
+          <End Role="Slide_Choice" Type="Self.Slide_Choice" Multiplicity="1" />
+          <End Role="Slide_Answer" Type="Self.Slide_Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Slide_Choice">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Slide_Answer">
+              <PropertyRef Name="slide_choice_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Slide_Answer_Test">
+          <End Role="Test" Type="Self.Test" Multiplicity="1" />
+          <End Role="Slide_Answer" Type="Self.Slide_Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Slide_Answer">
+              <PropertyRef Name="test_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Slide_Choice_Slide">
+          <End Role="Slide" Type="Self.Slide" Multiplicity="1" />
+          <End Role="Slide_Choice" Type="Self.Slide_Choice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Slide">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Slide_Choice">
+              <PropertyRef Name="slide_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Slide_Test_Definition">
+          <End Role="Test_Definition" Type="Self.Test_Definition" Multiplicity="1" />
+          <End Role="Slide" Type="Self.Slide" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test_Definition">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Slide">
+              <PropertyRef Name="test_definition_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_Candidate">
+          <End Role="Candidate" Type="Self.Candidate" Multiplicity="1" />
+          <End Role="Test" Type="Self.Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Candidate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="candidate_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_Test_Definition">
+          <End Role="Test_Definition" Type="Self.Test_Definition" Multiplicity="1" />
+          <End Role="Test" Type="Self.Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test_Definition">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="test_definition_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tracking_Slide">
+          <End Role="Slide" Type="Self.Slide" Multiplicity="1" />
+          <End Role="Tracking" Type="Self.Tracking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Slide">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Tracking">
+              <PropertyRef Name="slide_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tracking_Test">
+          <End Role="Test" Type="Self.Test" Multiplicity="1" />
+          <End Role="Tracking" Type="Self.Tracking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Tracking">
+              <PropertyRef Name="test_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EyetrackerModelStoreContainer">
+          <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Candidate" EntityType="Self.Candidate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Choice" EntityType="Self.Choice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Questionnaire" EntityType="Self.Questionnaire" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Settings" EntityType="Self.Settings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Slide" EntityType="Self.Slide" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Slide_Answer" EntityType="Self.Slide_Answer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Slide_Choice" EntityType="Self.Slide_Choice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Test" EntityType="Self.Test" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Test_Definition" EntityType="Self.Test_Definition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tracking" EntityType="Self.Tracking" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Answer_Choice" Association="Self.FK_Answer_Choice">
+            <End Role="Choice" EntitySet="Choice" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Answer_Question" Association="Self.FK_Answer_Question">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Answer_Test" Association="Self.FK_Answer_Test">
+            <End Role="Test" EntitySet="Test" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Choice_Question" Association="Self.FK_Choice_Question">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="Choice" EntitySet="Choice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Question_Questionnaire" Association="Self.FK_Question_Questionnaire">
+            <End Role="Questionnaire" EntitySet="Questionnaire" />
+            <End Role="Question" EntitySet="Question" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Questionnaire_Questionnaire" Association="Self.FK_Questionnaire_Questionnaire">
+            <End Role="Test_Definition" EntitySet="Test_Definition" />
+            <End Role="Questionnaire" EntitySet="Questionnaire" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slide_Answer_Slide" Association="Self.FK_Slide_Answer_Slide">
+            <End Role="Slide" EntitySet="Slide" />
+            <End Role="Slide_Answer" EntitySet="Slide_Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slide_Answer_Slide_Choice" Association="Self.FK_Slide_Answer_Slide_Choice">
+            <End Role="Slide_Choice" EntitySet="Slide_Choice" />
+            <End Role="Slide_Answer" EntitySet="Slide_Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slide_Answer_Test" Association="Self.FK_Slide_Answer_Test">
+            <End Role="Test" EntitySet="Test" />
+            <End Role="Slide_Answer" EntitySet="Slide_Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slide_Choice_Slide" Association="Self.FK_Slide_Choice_Slide">
+            <End Role="Slide" EntitySet="Slide" />
+            <End Role="Slide_Choice" EntitySet="Slide_Choice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slide_Test_Definition" Association="Self.FK_Slide_Test_Definition">
+            <End Role="Test_Definition" EntitySet="Test_Definition" />
+            <End Role="Slide" EntitySet="Slide" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_Candidate" Association="Self.FK_Test_Candidate">
+            <End Role="Candidate" EntitySet="Candidate" />
+            <End Role="Test" EntitySet="Test" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_Test_Definition" Association="Self.FK_Test_Test_Definition">
+            <End Role="Test_Definition" EntitySet="Test_Definition" />
+            <End Role="Test" EntitySet="Test" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tracking_Slide" Association="Self.FK_Tracking_Slide">
+            <End Role="Slide" EntitySet="Slide" />
+            <End Role="Tracking" EntitySet="Tracking" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tracking_Test" Association="Self.FK_Tracking_Test">
+            <End Role="Test" EntitySet="Test" />
+            <End Role="Tracking" EntitySet="Tracking" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="EyetrackerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Answer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="test_id" Type="Int32" Nullable="false" />
+          <Property Name="question_id" Type="Int32" Nullable="false" />
+          <Property Name="answer1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="choice_id" Type="Int32" />
+          <Property Name="is_correct" Type="Boolean" />
+          <Property Name="answered" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Choice" Relationship="Self.FK_Answer_Choice" FromRole="Answer" ToRole="Choice" />
+          <NavigationProperty Name="Question" Relationship="Self.FK_Answer_Question" FromRole="Answer" ToRole="Question" />
+          <NavigationProperty Name="Test" Relationship="Self.FK_Answer_Test" FromRole="Answer" ToRole="Test" />
+        </EntityType>
+        <EntityType Name="Candidate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="personal_code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="gender" Type="String" MaxLength="1" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="age_range_low" Type="Int32" Nullable="false" />
+          <Property Name="age_range_high" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Test" Relationship="Self.FK_Test_Candidate" FromRole="Candidate" ToRole="Test" />
+        </EntityType>
+        <EntityType Name="Choice">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="question_id" Type="Int32" Nullable="false" />
+          <Property Name="num" Type="Int32" Nullable="false" />
+          <Property Name="shortcut" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="choice1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="is_correct" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Answer" Relationship="Self.FK_Answer_Choice" FromRole="Choice" ToRole="Answer" />
+          <NavigationProperty Name="Question" Relationship="Self.FK_Choice_Question" FromRole="Choice" ToRole="Question" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="questionnaire_id" Type="Int32" Nullable="false" />
+          <Property Name="type_cd" Type="String" MaxLength="1" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="num" Type="Decimal" Precision="2" Scale="1" Nullable="false" />
+          <Property Name="question1" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="correct_answer" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Answer" Relationship="Self.FK_Answer_Question" FromRole="Question" ToRole="Answer" />
+          <NavigationProperty Name="Choice" Relationship="Self.FK_Choice_Question" FromRole="Question" ToRole="Choice" />
+          <NavigationProperty Name="Questionnaire" Relationship="Self.FK_Question_Questionnaire" FromRole="Question" ToRole="Questionnaire" />
+        </EntityType>
+        <EntityType Name="Questionnaire">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Test_Definition_Id" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Help" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Question" Relationship="Self.FK_Question_Questionnaire" FromRole="Questionnaire" ToRole="Question" />
+          <NavigationProperty Name="Test_Definition" Relationship="Self.FK_Questionnaire_Questionnaire" FromRole="Questionnaire" ToRole="Test_Definition" />
+        </EntityType>
+        <EntityType Name="Settings">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="value" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Slide">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="test_definition_id" Type="Int32" Nullable="false" />
+          <Property Name="num" Type="Int32" Nullable="false" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="filepath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="image_mime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="duration" Type="Int32" />
+          <Property Name="is_multiple_choice" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Slide_Answer" Relationship="Self.FK_Slide_Answer_Slide" FromRole="Slide" ToRole="Slide_Answer" />
+          <NavigationProperty Name="Slide_Choice" Relationship="Self.FK_Slide_Choice_Slide" FromRole="Slide" ToRole="Slide_Choice" />
+          <NavigationProperty Name="Test_Definition" Relationship="Self.FK_Slide_Test_Definition" FromRole="Slide" ToRole="Test_Definition" />
+          <NavigationProperty Name="Tracking" Relationship="Self.FK_Tracking_Slide" FromRole="Slide" ToRole="Tracking" />
+        </EntityType>
+        <EntityType Name="Slide_Answer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="test_id" Type="Int32" Nullable="false" />
+          <Property Name="slide_id" Type="Int32" Nullable="false" />
+          <Property Name="slide_choice_id" Type="Int32" Nullable="false" />
+          <Property Name="slide_start_time" Type="DateTime" Precision="3" />
+          <Property Name="slide_end_time" Type="DateTime" Precision="3" />
+          <Property Name="answered" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Slide" Relationship="Self.FK_Slide_Answer_Slide" FromRole="Slide_Answer" ToRole="Slide" />
+          <NavigationProperty Name="Slide_Choice" Relationship="Self.FK_Slide_Answer_Slide_Choice" FromRole="Slide_Answer" ToRole="Slide_Choice" />
+          <NavigationProperty Name="Test" Relationship="Self.FK_Slide_Answer_Test" FromRole="Slide_Answer" ToRole="Test" />
+        </EntityType>
+        <EntityType Name="Slide_Choice">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="slide_id" Type="Int32" Nullable="false" />
+          <Property Name="shortcut" Type="String" MaxLength="1" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="num" Type="Int32" Nullable="false" />
+          <Property Name="choice" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Slide" Relationship="Self.FK_Slide_Choice_Slide" FromRole="Slide_Choice" ToRole="Slide" />
+          <NavigationProperty Name="Slide_Answer" Relationship="Self.FK_Slide_Answer_Slide_Choice" FromRole="Slide_Choice" ToRole="Slide_Answer" />
+        </EntityType>
+        <EntityType Name="Test">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="test_definition_id" Type="Int32" Nullable="false" />
+          <Property Name="candidate_id" Type="Int32" Nullable="false" />
+          <Property Name="start_time" Type="DateTime" Precision="3" />
+          <Property Name="end_time" Type="DateTime" Precision="3" />
+          <Property Name="test_group" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="status_cd" Type="String" MaxLength="3" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Answer" Relationship="Self.FK_Answer_Test" FromRole="Test" ToRole="Answer" />
+          <NavigationProperty Name="Candidate" Relationship="Self.FK_Test_Candidate" FromRole="Test" ToRole="Candidate" />
+          <NavigationProperty Name="Slide_Answer" Relationship="Self.FK_Slide_Answer_Test" FromRole="Test" ToRole="Slide_Answer" />
+          <NavigationProperty Name="Test_Definition" Relationship="Self.FK_Test_Test_Definition" FromRole="Test" ToRole="Test_Definition" />
+          <NavigationProperty Name="Tracking" Relationship="Self.FK_Tracking_Test" FromRole="Test" ToRole="Tracking" />
+        </EntityType>
+        <EntityType Name="Test_Definition">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="language" Type="String" MaxLength="2" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Version" Type="Int16" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Questionnaire" Relationship="Self.FK_Questionnaire_Questionnaire" FromRole="Test_Definition" ToRole="Questionnaire" />
+          <NavigationProperty Name="Slide" Relationship="Self.FK_Slide_Test_Definition" FromRole="Test_Definition" ToRole="Slide" />
+          <NavigationProperty Name="Test" Relationship="Self.FK_Test_Test_Definition" FromRole="Test_Definition" ToRole="Test" />
+        </EntityType>
+        <EntityType Name="Tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="test_id" Type="Int32" Nullable="false" />
+          <Property Name="slide_id" Type="Int32" Nullable="false" />
+          <Property Name="occurred" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="x" Type="Decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="y" Type="Decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="diameter" Type="Decimal" Precision="6" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Slide" Relationship="Self.FK_Tracking_Slide" FromRole="Tracking" ToRole="Slide" />
+          <NavigationProperty Name="Test" Relationship="Self.FK_Tracking_Test" FromRole="Tracking" ToRole="Test" />
+        </EntityType>
+        <Association Name="FK_Answer_Choice">
+          <End Role="Choice" Type="Self.Choice" Multiplicity="0..1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Choice">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="choice_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Answer_Question">
+          <End Role="Question" Type="Self.Question" Multiplicity="1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="question_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Answer_Test">
+          <End Role="Test" Type="Self.Test" Multiplicity="1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="test_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_Candidate">
+          <End Role="Candidate" Type="Self.Candidate" Multiplicity="1" />
+          <End Role="Test" Type="Self.Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Candidate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="candidate_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Choice_Question">
+          <End Role="Question" Type="Self.Question" Multiplicity="1" />
+          <End Role="Choice" Type="Self.Choice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Choice">
+              <PropertyRef Name="question_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Question_Questionnaire">
+          <End Role="Questionnaire" Type="Self.Questionnaire" Multiplicity="1" />
+          <End Role="Question" Type="Self.Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Questionnaire">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="questionnaire_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Questionnaire_Questionnaire">
+          <End Role="Test_Definition" Type="Self.Test_Definition" Multiplicity="1" />
+          <End Role="Questionnaire" Type="Self.Questionnaire" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test_Definition">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Questionnaire">
+              <PropertyRef Name="Test_Definition_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Slide_Answer_Slide">
+          <End Role="Slide" Type="Self.Slide" Multiplicity="1" />
+          <End Role="Slide_Answer" Type="Self.Slide_Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Slide">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Slide_Answer">
+              <PropertyRef Name="slide_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Slide_Choice_Slide">
+          <End Role="Slide" Type="Self.Slide" Multiplicity="1" />
+          <End Role="Slide_Choice" Type="Self.Slide_Choice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Slide">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Slide_Choice">
+              <PropertyRef Name="slide_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Slide_Test_Definition">
+          <End Role="Test_Definition" Type="Self.Test_Definition" Multiplicity="1" />
+          <End Role="Slide" Type="Self.Slide" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test_Definition">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Slide">
+              <PropertyRef Name="test_definition_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tracking_Slide">
+          <End Role="Slide" Type="Self.Slide" Multiplicity="1" />
+          <End Role="Tracking" Type="Self.Tracking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Slide">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Tracking">
+              <PropertyRef Name="slide_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Slide_Answer_Slide_Choice">
+          <End Role="Slide_Choice" Type="Self.Slide_Choice" Multiplicity="1" />
+          <End Role="Slide_Answer" Type="Self.Slide_Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Slide_Choice">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Slide_Answer">
+              <PropertyRef Name="slide_choice_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Slide_Answer_Test">
+          <End Role="Test" Type="Self.Test" Multiplicity="1" />
+          <End Role="Slide_Answer" Type="Self.Slide_Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Slide_Answer">
+              <PropertyRef Name="test_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_Test_Definition">
+          <End Role="Test_Definition" Type="Self.Test_Definition" Multiplicity="1" />
+          <End Role="Test" Type="Self.Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test_Definition">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="test_definition_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tracking_Test">
+          <End Role="Test" Type="Self.Test" Multiplicity="1" />
+          <End Role="Tracking" Type="Self.Tracking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Tracking">
+              <PropertyRef Name="test_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EyetrackerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Answer" EntityType="Self.Answer" />
+          <EntitySet Name="Candidate" EntityType="Self.Candidate" />
+          <EntitySet Name="Choice" EntityType="Self.Choice" />
+          <EntitySet Name="Question" EntityType="Self.Question" />
+          <EntitySet Name="Questionnaire" EntityType="Self.Questionnaire" />
+          <EntitySet Name="Settings" EntityType="Self.Settings" />
+          <EntitySet Name="Slide" EntityType="Self.Slide" />
+          <EntitySet Name="Slide_Answer" EntityType="Self.Slide_Answer" />
+          <EntitySet Name="Slide_Choice" EntityType="Self.Slide_Choice" />
+          <EntitySet Name="Test" EntityType="Self.Test" />
+          <EntitySet Name="Test_Definition" EntityType="Self.Test_Definition" />
+          <EntitySet Name="Tracking" EntityType="Self.Tracking" />
+          <AssociationSet Name="FK_Answer_Choice" Association="Self.FK_Answer_Choice">
+            <End Role="Choice" EntitySet="Choice" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Answer_Question" Association="Self.FK_Answer_Question">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Answer_Test" Association="Self.FK_Answer_Test">
+            <End Role="Test" EntitySet="Test" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_Candidate" Association="Self.FK_Test_Candidate">
+            <End Role="Candidate" EntitySet="Candidate" />
+            <End Role="Test" EntitySet="Test" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Choice_Question" Association="Self.FK_Choice_Question">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="Choice" EntitySet="Choice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Question_Questionnaire" Association="Self.FK_Question_Questionnaire">
+            <End Role="Questionnaire" EntitySet="Questionnaire" />
+            <End Role="Question" EntitySet="Question" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Questionnaire_Questionnaire" Association="Self.FK_Questionnaire_Questionnaire">
+            <End Role="Test_Definition" EntitySet="Test_Definition" />
+            <End Role="Questionnaire" EntitySet="Questionnaire" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slide_Answer_Slide" Association="Self.FK_Slide_Answer_Slide">
+            <End Role="Slide" EntitySet="Slide" />
+            <End Role="Slide_Answer" EntitySet="Slide_Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slide_Choice_Slide" Association="Self.FK_Slide_Choice_Slide">
+            <End Role="Slide" EntitySet="Slide" />
+            <End Role="Slide_Choice" EntitySet="Slide_Choice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slide_Test_Definition" Association="Self.FK_Slide_Test_Definition">
+            <End Role="Test_Definition" EntitySet="Test_Definition" />
+            <End Role="Slide" EntitySet="Slide" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tracking_Slide" Association="Self.FK_Tracking_Slide">
+            <End Role="Slide" EntitySet="Slide" />
+            <End Role="Tracking" EntitySet="Tracking" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slide_Answer_Slide_Choice" Association="Self.FK_Slide_Answer_Slide_Choice">
+            <End Role="Slide_Choice" EntitySet="Slide_Choice" />
+            <End Role="Slide_Answer" EntitySet="Slide_Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slide_Answer_Test" Association="Self.FK_Slide_Answer_Test">
+            <End Role="Test" EntitySet="Test" />
+            <End Role="Slide_Answer" EntitySet="Slide_Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_Test_Definition" Association="Self.FK_Test_Test_Definition">
+            <End Role="Test_Definition" EntitySet="Test_Definition" />
+            <End Role="Test" EntitySet="Test" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tracking_Test" Association="Self.FK_Tracking_Test">
+            <End Role="Test" EntitySet="Test" />
+            <End Role="Tracking" EntitySet="Tracking" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EyetrackerModelStoreContainer" CdmEntityContainer="EyetrackerEntities">
+          <EntitySetMapping Name="Answer">
+            <EntityTypeMapping TypeName="EyetrackerModel.Answer">
+              <MappingFragment StoreEntitySet="Answer">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="test_id" ColumnName="test_id" />
+                <ScalarProperty Name="question_id" ColumnName="question_id" />
+                <ScalarProperty Name="answer1" ColumnName="answer" />
+                <ScalarProperty Name="choice_id" ColumnName="choice_id" />
+                <ScalarProperty Name="is_correct" ColumnName="is_correct" />
+                <ScalarProperty Name="answered" ColumnName="answered" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Candidate">
+            <EntityTypeMapping TypeName="EyetrackerModel.Candidate">
+              <MappingFragment StoreEntitySet="Candidate">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="personal_code" ColumnName="personal_code" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="age_range_low" ColumnName="age_range_low" />
+                <ScalarProperty Name="age_range_high" ColumnName="age_range_high" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Choice">
+            <EntityTypeMapping TypeName="EyetrackerModel.Choice">
+              <MappingFragment StoreEntitySet="Choice">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="question_id" ColumnName="question_id" />
+                <ScalarProperty Name="num" ColumnName="num" />
+                <ScalarProperty Name="shortcut" ColumnName="shortcut" />
+                <ScalarProperty Name="choice1" ColumnName="choice" />
+                <ScalarProperty Name="is_correct" ColumnName="is_correct" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Question">
+            <EntityTypeMapping TypeName="EyetrackerModel.Question">
+              <MappingFragment StoreEntitySet="Question">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="questionnaire_id" ColumnName="questionnaire_id" />
+                <ScalarProperty Name="type_cd" ColumnName="type_cd" />
+                <ScalarProperty Name="num" ColumnName="num" />
+                <ScalarProperty Name="question1" ColumnName="question" />
+                <ScalarProperty Name="correct_answer" ColumnName="correct_answer" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Questionnaire">
+            <EntityTypeMapping TypeName="EyetrackerModel.Questionnaire">
+              <MappingFragment StoreEntitySet="Questionnaire">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Test_Definition_Id" ColumnName="Test_Definition_Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Help" ColumnName="Help" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Settings">
+            <EntityTypeMapping TypeName="EyetrackerModel.Settings">
+              <MappingFragment StoreEntitySet="Settings">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="value" ColumnName="value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Slide">
+            <EntityTypeMapping TypeName="EyetrackerModel.Slide">
+              <MappingFragment StoreEntitySet="Slide">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="test_definition_id" ColumnName="test_definition_id" />
+                <ScalarProperty Name="num" ColumnName="num" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="filepath" ColumnName="filepath" />
+                <ScalarProperty Name="image" ColumnName="image" />
+                <ScalarProperty Name="image_mime" ColumnName="image_mime" />
+                <ScalarProperty Name="duration" ColumnName="duration" />
+                <ScalarProperty Name="is_multiple_choice" ColumnName="is_multiple_choice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Slide_Answer">
+            <EntityTypeMapping TypeName="EyetrackerModel.Slide_Answer">
+              <MappingFragment StoreEntitySet="Slide_Answer">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="test_id" ColumnName="test_id" />
+                <ScalarProperty Name="slide_id" ColumnName="slide_id" />
+                <ScalarProperty Name="slide_choice_id" ColumnName="slide_choice_id" />
+                <ScalarProperty Name="slide_start_time" ColumnName="slide_start_time" />
+                <ScalarProperty Name="slide_end_time" ColumnName="slide_end_time" />
+                <ScalarProperty Name="answered" ColumnName="answered" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Slide_Choice">
+            <EntityTypeMapping TypeName="EyetrackerModel.Slide_Choice">
+              <MappingFragment StoreEntitySet="Slide_Choice">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="slide_id" ColumnName="slide_id" />
+                <ScalarProperty Name="shortcut" ColumnName="shortcut" />
+                <ScalarProperty Name="num" ColumnName="num" />
+                <ScalarProperty Name="choice" ColumnName="choice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Test">
+            <EntityTypeMapping TypeName="EyetrackerModel.Test">
+              <MappingFragment StoreEntitySet="Test">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="test_definition_id" ColumnName="test_definition_id" />
+                <ScalarProperty Name="candidate_id" ColumnName="candidate_id" />
+                <ScalarProperty Name="start_time" ColumnName="start_time" />
+                <ScalarProperty Name="end_time" ColumnName="end_time" />
+                <ScalarProperty Name="test_group" ColumnName="test_group" />
+                <ScalarProperty Name="comment" ColumnName="comment" />
+                <ScalarProperty Name="status_cd" ColumnName="status_cd" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Test_Definition">
+            <EntityTypeMapping TypeName="EyetrackerModel.Test_Definition">
+              <MappingFragment StoreEntitySet="Test_Definition">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="language" ColumnName="language" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tracking">
+            <EntityTypeMapping TypeName="EyetrackerModel.Tracking">
+              <MappingFragment StoreEntitySet="Tracking">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="test_id" ColumnName="test_id" />
+                <ScalarProperty Name="slide_id" ColumnName="slide_id" />
+                <ScalarProperty Name="occurred" ColumnName="occurred" />
+                <ScalarProperty Name="x" ColumnName="x" />
+                <ScalarProperty Name="y" ColumnName="y" />
+                <ScalarProperty Name="diameter" ColumnName="diameter" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Kein" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
