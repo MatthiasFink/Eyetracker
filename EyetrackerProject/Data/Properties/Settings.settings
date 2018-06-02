@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Data.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DBSchema" Type="System.String" Scope="User">
+      <Value Profile="(Default)">dbo</Value>
+    </Setting>
+    <Setting Name="DBWindowsAuthentication" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DBUser" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DBPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DBServer" Type="System.String" Scope="User">
+      <Value Profile="(Default)">localhost\SQLEXPRESS2</Value>
+    </Setting>
+    <Setting Name="DBCatalog" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Eyetracker</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

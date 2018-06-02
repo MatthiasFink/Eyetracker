@@ -1,26 +1,38 @@
-﻿<RibbonWindow x:Class="EyetrackerExperiment.MainWindow"
+﻿<RibbonWindow
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EyetrackerExperiment"
+        xmlns:Data="clr-namespace:Data;assembly=Data" 
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        x:Name="ribbonWindow" x:Class="EyetrackerExperiment.MainWindow"
+        Title="Experiment Manager" Height="450" Width="800" Icon="Resources/ventum.ico">
+    <RibbonWindow.DataContext>
+        <Data:EyetrackerEntities/>
+    </RibbonWindow.DataContext>
     <DockPanel LastChildFill="True">
         <Ribbon DockPanel.Dock="Top">
+            <Ribbon.QuickAccessToolBar>
+                <RibbonQuickAccessToolBar>
+                    <RibbonButton Name="bnSettings" SmallImageSource="Resources/Settings32.png"  Click="bnSettings_Click" ToolTipDescription="CHange database connection"/>
+                </RibbonQuickAccessToolBar>
+            </Ribbon.QuickAccessToolBar>
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu Visibility="Collapsed"/>
             </Ribbon.ApplicationMenu>
-            <RibbonTab Header="Start">
-                
-            </RibbonTab>
-            
+            <RibbonTab Header="Start"/>
+
         </Ribbon>
-        <StatusBar DockPanel.Dock="Bottom" Height="25">
-            
-        </StatusBar>
-        <DataGrid>
-            
+        <StatusBar DockPanel.Dock="Bottom" Height="25"/>
+        <DataGrid x:Name="gridTests"  ItemsSource="{Binding tests}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Candidate" Binding="{Binding Candidate.personal_code}"/>
+                <DataGridTextColumn Header="Test Type" Binding="{Binding Test_Definition.Description}"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding status_cd}"/>
+                <DataGridTextColumn Header="Start" Binding="{Binding start_time}"/>
+                <DataGridTextColumn Header="Ende" Binding="{Binding end_time}" />
+            </DataGrid.Columns>
         </DataGrid>
     </DockPanel>
 </RibbonWindow>

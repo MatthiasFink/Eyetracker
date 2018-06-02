@@ -2,10 +2,17 @@
 # Diese .gitignore-Datei wurde von Microsoft(R) Visual Studio automatisch erstellt.
 ################################################################################
 
+/.vs
 /EyetrackerProject/.vs/EyetrackerExperiment/v15
 /EyetrackerProject/Data/obj
-/.vs
+/EyetrackerProject/Data/bin
 /EyetrackerProject/Demographic_Questionnaire/obj
+/EyetrackerProject/Demographic_Questionnaire/bin
 /EyetrackerProject/Post_Questionnaire/obj
+/EyetrackerProject/Post_Questionnaire/bin
 /EyetrackerProject/EyeTracking/obj
+/EyetrackerProject/EyeTracking/bin
+/EyetrackerProject/EyetrackerExperiment/obj
+/EyetrackerProject/EyetrackerExperiment/bin
 /EyetrackerProject/packages/EntityFramework.6.2.0/lib
+
