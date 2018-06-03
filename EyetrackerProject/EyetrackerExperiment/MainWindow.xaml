@@ -11,6 +11,9 @@
     <RibbonWindow.DataContext>
         <Data:EyetrackerEntities/>
     </RibbonWindow.DataContext>
+    <RibbonWindow.Resources>
+        <Data:TestStatusConverter x:Key="TestStatusConverter"/>
+    </RibbonWindow.Resources>
     <DockPanel LastChildFill="True">
         <Ribbon DockPanel.Dock="Top">
             <Ribbon.QuickAccessToolBar>
@@ -25,13 +28,13 @@
 
         </Ribbon>
         <StatusBar DockPanel.Dock="Bottom" Height="25"/>
-        <DataGrid x:Name="gridTests"  ItemsSource="{Binding tests}" AutoGenerateColumns="False">
+        <DataGrid x:Name="gridTests" ItemsSource="{Binding tests}" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Candidate" Binding="{Binding Candidate.personal_code}"/>
-                <DataGridTextColumn Header="Test Type" Binding="{Binding Test_Definition.Description}"/>
-                <DataGridTextColumn Header="Status" Binding="{Binding status_cd}"/>
-                <DataGridTextColumn Header="Start" Binding="{Binding start_time}"/>
-                <DataGridTextColumn Header="Ende" Binding="{Binding end_time}" />
+                <DataGridTextColumn Header="Proband" Binding="{Binding Candidate.personal_code}"/>
+                <DataGridTextColumn Header="Test Typ" Binding="{Binding Test_Definition.Title}"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding status_cd, Converter={StaticResource TestStatusConverter}, ConverterParameter=de}"/>
+                <DataGridTextColumn Header="Start" Binding="{Binding start_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}"/>
+                <DataGridTextColumn Header="Ende" Binding="{Binding end_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}" />
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>
