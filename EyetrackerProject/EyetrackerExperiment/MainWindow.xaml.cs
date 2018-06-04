@@ -48,5 +48,40 @@ namespace EyetrackerExperiment
                 LoadData();
             }
         }
+
+        private void AddNewTest(object sender, RoutedEventArgs e)
+        {
+            NewTest newTest = new NewTest(db);
+            if (newTest.ShowDialog().GetValueOrDefault(false))
+            {
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        private void RunNextQuestionnaire(object sender, RoutedEventArgs e)
+        {
+            Test test = (Test)gridTests.SelectedItem;
+            Questionnaire questionnaire = null;
+            foreach (Questionnaire q in test.Test_Definition.Questionnaire)
+            {
+                if (test.Answer.Count(a => a.Question.Questionnaire == q) == 0)
+                {
+                    questionnaire = q;
+                    break;
+                }
+            }
+            if (questionnaire != null)
+            {
+                QuestionnaireWindow qw = new QuestionnaireWindow(db, test, questionnaire);
+                qw.Show();
+            }
+        }
     }
 }

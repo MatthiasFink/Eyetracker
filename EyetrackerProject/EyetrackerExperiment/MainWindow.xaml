@@ -18,13 +18,20 @@
         <Ribbon DockPanel.Dock="Top">
             <Ribbon.QuickAccessToolBar>
                 <RibbonQuickAccessToolBar>
-                    <RibbonButton Name="bnSettings" SmallImageSource="Resources/Settings32.png"  Click="bnSettings_Click" ToolTipDescription="CHange database connection"/>
+                    <RibbonButton Name="bnSettings" SmallImageSource="Resources/Settings32.png"  Click="bnSettings_Click" ToolTip="Change database connection"/>
                 </RibbonQuickAccessToolBar>
             </Ribbon.QuickAccessToolBar>
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu Visibility="Collapsed"/>
             </Ribbon.ApplicationMenu>
-            <RibbonTab Header="Start"/>
+            <RibbonTab Header="Start">
+                <RibbonGroup Header="Manage Tests">
+                    <RibbonButton Label="Add Test" LargeImageSource="Resources/Settings32.png" Click="AddNewTest"/>
+                </RibbonGroup>
+                <RibbonGroup Header="Questionnaire">
+                    <RibbonButton Label="Execute Next" LargeImageSource="Resources/Settings32.png" Click="RunNextQuestionnaire"/>
+                </RibbonGroup> 
+            </RibbonTab>
 
         </Ribbon>
         <StatusBar DockPanel.Dock="Bottom" Height="25"/>
@@ -32,7 +39,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Proband" Binding="{Binding Candidate.personal_code}"/>
                 <DataGridTextColumn Header="Test Typ" Binding="{Binding Test_Definition.Title}"/>
-                <DataGridTextColumn Header="Status" Binding="{Binding status_cd, Converter={StaticResource TestStatusConverter}, ConverterParameter=de}"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding status_cd, Converter={StaticResource TestStatusConverter}}"/>
                 <DataGridTextColumn Header="Start" Binding="{Binding start_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}"/>
                 <DataGridTextColumn Header="Ende" Binding="{Binding end_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}" />
             </DataGrid.Columns>

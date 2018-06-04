@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EyetrackerExperiment_Manager", "EyetrackerExperiment\EyetrackerExperiment_Manager.csproj", "{3251F82C-6AC6-40FC-8990-CD8676CC4FC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EyetrackerExperimentManager", "EyetrackerExperiment\EyetrackerExperimentManager.csproj", "{3251F82C-6AC6-40FC-8990-CD8676CC4FC5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demographic_Questionnaire", "Demographic_Questionnaire\Demographic_Questionnaire.csproj", "{8B2F663D-AE05-4226-9C41-2EC4F8CEC184}"
 EndProject

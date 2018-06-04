@@ -12,7 +12,7 @@ namespace Data
     {
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (parameter == null || (String)parameter == "de")
+            if (culture.IetfLanguageTag.StartsWith("de"))
             {
                 switch ((String)value)
                 {
@@ -21,7 +21,7 @@ namespace Data
                     case "TRM": return "Abgeschlossen";
                 }
             }
-            else if ((String)parameter == "en")
+            else if (culture.IetfLanguageTag.StartsWith("en"))
             {
                 switch ((String)value)
                 {
@@ -35,7 +35,7 @@ namespace Data
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (parameter == null || (String)parameter == "de")
+            if (culture.IsNeutralCulture || culture.IetfLanguageTag == "DE-de")
             {
                 switch ((String)value)
                 {
@@ -44,7 +44,7 @@ namespace Data
                     case "Abgeschlossen": return "TRM";
                 }
             }
-            else if ((String)parameter == "en")
+            else
             {
                 switch ((String)value)
                 {
@@ -54,6 +54,40 @@ namespace Data
                 }
             }
             return ((String)value).Substring(0, 3);
+        }
+    }
+
+    public class StringEqualityConverter : IValueConverter
+    {
+        object IValueConverter.Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            String parameterString = (String)parameter;
+            if (parameterString == null)
+                return System.Windows.DependencyProperty.UnsetValue;
+
+            return parameterString.Equals(value);
+        }
+
+        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (Boolean)value ? parameter : System.Windows.DependencyProperty.UnsetValue;
+        }
+    }
+
+    public class IntEqualityConverter : IValueConverter
+    {
+        object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            String parameterString = (String)parameter;
+            if (parameterString == null)
+                return System.Windows.DependencyProperty.UnsetValue;
+
+            return parameterString.Equals(value.ToString());
+        }
+
+        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (Boolean)value ? parameter : System.Windows.DependencyProperty.UnsetValue;
         }
     }
 }

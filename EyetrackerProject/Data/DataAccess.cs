@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data.Entity;
 using System.Data.Entity.Core.EntityClient;
 using System.Linq;
@@ -12,6 +13,12 @@ namespace Data
     public class Tests : ObservableCollection<Test> { }
     public class Candidates : ObservableCollection<Candidate> { }
     public class TestDefinitions : ObservableCollection<Test_Definition> { }
+    public class AgeRange
+    {
+        public String name;
+        public int rangeLow;
+        public int rangeHigh;
+    }
 
     public partial class EyetrackerEntities : DbContext
     {
@@ -80,5 +87,16 @@ namespace Data
                     tests.Add(t);
             }
         }
+
+        public List<AgeRange> ageRanges = new List<AgeRange>()
+        {
+            new AgeRange() {name="0", rangeLow=0, rangeHigh=24 },
+            new AgeRange() {name="25", rangeLow=25, rangeHigh=35 },
+            new AgeRange() {name="36", rangeLow=36, rangeHigh=45 },
+            new AgeRange() {name="46", rangeLow=46, rangeHigh=55 },
+            new AgeRange() {name="56", rangeLow=56, rangeHigh=99 }
+        };
     }
+
+
 }

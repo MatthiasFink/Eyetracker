@@ -91,6 +91,7 @@
     <Compile Include="Question.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="QuestionnaireAnswer.cs" />
     <Compile Include="Questionnaire.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
