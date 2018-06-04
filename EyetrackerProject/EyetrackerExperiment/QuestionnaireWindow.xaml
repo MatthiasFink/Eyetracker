@@ -63,6 +63,24 @@
                             </ItemsControl>
                         </Grid>
                     </DataTemplate>
+                    <DataTemplate x:Name="YesNoQuestionTemplate" DataType="{x:Type data:YesNoQuestionAnswer}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="9*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="{Binding QuestionEntity.num}" FontWeight="DemiBold" Margin="0 10 0 2"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Question}" FontWeight="DemiBold" Margin="0 10 0 2"/>
+                            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" >
+                                <RadioButton Content="Yes" IsChecked="{Binding IsYes}" GroupName="{Binding YesNoGroupName}" Margin="0 0 20 0"/>
+                                <RadioButton Content="No" IsChecked="{Binding IsNo}" GroupName="{Binding YesNoGroupName}"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
                 </ItemsControl.Resources>
             </ItemsControl>
         </ScrollViewer>

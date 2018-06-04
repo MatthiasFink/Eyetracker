@@ -70,6 +70,7 @@ namespace Data
             {
                 case "O": return new OnlyCommentQuestionAnswer(question, test);
                 case "T": return new StringQuestionAnswer(question, test);
+                case "Y": return new YesNoQuestionAnswer(question, test);
                 case "C": return new ChoiceQuestionAnswer(question, test);
                 default: return null;
             }
@@ -150,6 +151,49 @@ namespace Data
 
         public String Shortcut { get { return c.shortcut; } }
         public String Label { get { return c.choice1; } }
+    }
+
+    public class YesNoQuestionAnswer : BaseQuestionAnswer
+    {
+        public YesNoQuestionAnswer() : base() { }
+
+        public YesNoQuestionAnswer(Question question, Test test)
+            : base(question, test)
+        { }
+
+        public String YesNoGroupName { get { return "group" + q.num; } }
+
+        public bool? AnswerYesNo {
+            get
+            {
+                return (a == null) ? (bool?)null : a.answer1 == "Y";
+            }
+            set
+            {
+                if (!value.HasValue) 
+                {
+                    if (a != null)
+                    {
+                        a = null;
+                        OnPropertyChanged("AnswerChoice");
+                    }
+                    return;
+                }
+                if (a == null)
+                {
+                    a = new Answer();
+                    a.Question = q;
+                    a.Test = t;
+                }
+                if ((value.Value ? "Y" : "N") != a.answer1)
+                {
+                    a.answer1 = value.Value ? "Y" : "N";
+                    OnPropertyChanged("AnswerChoice");
+                }
+            }
+        }
+        public bool IsYes { get { return AnswerYesNo.HasValue && AnswerYesNo.Value; } set { if (value) AnswerYesNo = true; } }
+        public bool IsNo { get { return AnswerYesNo.HasValue && !AnswerYesNo.Value; } set { if (value) AnswerYesNo = false; } }
     }
 
     public class ChoiceQuestionAnswer : BaseQuestionAnswer

@@ -36,7 +36,7 @@
           <Property Name="num" Type="int" Nullable="false" />
           <Property Name="shortcut" Type="nvarchar" MaxLength="1" />
           <Property Name="choice" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="is_correct" Type="bit" Nullable="false" />
+          <Property Name="is_correct" Type="bit" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -431,7 +431,7 @@
           <Property Name="num" Type="Int32" Nullable="false" />
           <Property Name="shortcut" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
           <Property Name="choice1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="is_correct" Type="Boolean" Nullable="false" />
+          <Property Name="is_correct" Type="Boolean" />
           <NavigationProperty Name="Answer" Relationship="Self.FK_Answer_Choice" FromRole="Choice" ToRole="Answer" />
           <NavigationProperty Name="Question" Relationship="Self.FK_Choice_Question" FromRole="Choice" ToRole="Question" />
         </EntityType>

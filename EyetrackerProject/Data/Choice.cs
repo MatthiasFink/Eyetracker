@@ -25,7 +25,7 @@ namespace Data
         public int num { get; set; }
         public string shortcut { get; set; }
         public string choice1 { get; set; }
-        public bool is_correct { get; set; }
+        public Nullable<bool> is_correct { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Answer> Answer { get; set; }
