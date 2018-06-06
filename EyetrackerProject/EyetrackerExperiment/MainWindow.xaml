@@ -33,7 +33,21 @@
                 <RibbonGroup Header="Steps">
                     <RibbonButton Label="Execute Next" x:Name="rbnExecuteNext" LargeImageSource="Resources/Settings32.png" Click="RunNextStep"/>
                     <RibbonButton Label="Delete Last" x:Name="rbnDeleteLast" LargeImageSource="Resources/Settings32.png" Click="DeleteLastStep"/>
-                </RibbonGroup> 
+                </RibbonGroup>
+                <RibbonGroup Header="View">
+                    <RibbonSplitButton x:Name="rbsFilter" LargeImageSource="Resources/Filter32.png" Label="Filter" Click="FilterCheck">
+                        <RibbonSplitMenuItem Header="By Status" IsCheckable="false" FontWeight="Bold" Focusable="False" IsHitTestVisible="False" IsTabStop="False"/>
+                        <RibbonSplitMenuItem Header="New only" IsCheckable="True" x:Name="FilterNEW"/>
+                        <RibbonSplitMenuItem Header="In progress only" IsCheckable="True" x:Name="FilterPRG"/>
+                        <RibbonSplitMenuItem Header="Finished" IsCheckable="True" x:Name="FilterTRM"/>
+                        <RibbonSplitMenuItem Header="Unfinished only" IsCheckable="True" x:Name="FilterNEWPRG"/>
+                        <RibbonSeparator/>
+                        <RibbonSplitMenuItem Header="By Step" IsCheckable="false" FontWeight="Bold" Focusable="False" IsTabStop="False" IsHitTestVisible="False"/>
+                        <RibbonSplitMenuItem Header="Step 1" IsCheckable="True" x:Name="FilterS1"/>
+                        <RibbonSplitMenuItem Header="Step 2" IsCheckable="True" x:Name="FilterS2"/>
+                        <RibbonSplitMenuItem Header="Step 3" IsCheckable="True" x:Name="FilterS3"/>
+                    </RibbonSplitButton>
+                </RibbonGroup>
             </RibbonTab>
             <RibbonTab Header="Settings">
                 <RibbonGroup Header="Database">
@@ -48,16 +62,27 @@
 
         </Ribbon>
         <StatusBar DockPanel.Dock="Bottom" Height="25"/>
-        <DataGrid x:Name="gridTests" ItemsSource="{Binding Tests}" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" AlternatingRowBackground="#FFF0FFC5" CanUserAddRows="False" CanUserResizeRows="False" EnableRowVirtualization="False">
+        <DataGrid x:Name="gridTests" ItemsSource="{Binding Tests}" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" AlternatingRowBackground="#FFF0FFC5" CanUserAddRows="False" CanUserResizeRows="False" FrozenColumnCount="2" AreRowDetailsFrozen="True" RowDetailsVisibilityMode="Collapsed" MouseDoubleClick="gridTests_MouseDoubleClick">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Proband" Binding="{Binding Candidate.personal_code}"/>
-                <DataGridTextColumn Header="Test Typ" Binding="{Binding Test_Definition.Title}"/>
+                <DataGridTextColumn Header="Test Typ" Binding="{Binding Test_Definition.Title}" />
                 <DataGridTextColumn Header="Status" Binding="{Binding status_cd, Converter={StaticResource TestStatusConverter}}"/>
                 <DataGridTextColumn Header="Start" Binding="{Binding start_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}"/>
                 <DataGridTextColumn Header="Ende" Binding="{Binding end_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}" />
                 <DataGridTextColumn Header="Schritte" Binding="{Binding NumSteps}" />
                 <DataGridTextColumn Header="Abgeschlossen" Binding="{Binding LastStep}" />
             </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <ItemsControl ItemsSource="{Binding Steps}" >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Description}" Margin="10 2 0 2" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
         </DataGrid>
     </DockPanel>
 </RibbonWindow>

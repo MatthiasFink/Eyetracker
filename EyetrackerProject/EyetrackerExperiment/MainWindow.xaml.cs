@@ -128,6 +128,11 @@ namespace EyetrackerExperiment
                 test.start_time = null;
                 test.status_cd = "NEW";
             }
+            else if (test.status_cd == "TRM")
+            {
+                test.status_cd = "PRG";
+                test.end_time = null;
+            }
             db.SaveChanges();
         }
 
@@ -150,6 +155,88 @@ namespace EyetrackerExperiment
             }
         }
 
+        private void FilterCheck(object sender, RoutedEventArgs e)
+        {
+            RibbonSplitMenuItem changed = null;
+            if (e.OriginalSource.GetType() == typeof(RibbonSplitMenuItem))
+            {
+                changed = (RibbonSplitMenuItem)e.OriginalSource;
+                if (changed == FilterNEW && changed.IsChecked)
+                {
+                    FilterPRG.IsChecked = false;
+                    FilterTRM.IsChecked = false;
+                    FilterNEWPRG.IsChecked = false;
+                }
+                else if (changed == FilterPRG && changed.IsChecked)
+                {
+                    FilterNEW.IsChecked = false;
+                    FilterTRM.IsChecked = false;
+                    FilterNEWPRG.IsChecked = false;
+                }
+                else if (changed == FilterTRM && changed.IsChecked)
+                {
+                    FilterNEW.IsChecked = false;
+                    FilterPRG.IsChecked = false;
+                    FilterNEWPRG.IsChecked = false;
+                }
+                else if (changed == FilterNEWPRG && changed.IsChecked)
+                {
+                    FilterNEW.IsChecked = false;
+                    FilterPRG.IsChecked = false;
+                    FilterTRM.IsChecked = false;
+                }
+                else if (changed == FilterS1 && changed.IsChecked)
+                {
+                    FilterNEW.IsChecked = false;
+                    FilterS2.IsChecked = false;
+                    FilterS3.IsChecked = false;
+                }
+                else if (changed == FilterS2 && changed.IsChecked)
+                {
+                    FilterNEW.IsChecked = false;
+                    FilterS1.IsChecked = false;
+                    FilterS3.IsChecked = false;
+                }
+                else if (changed == FilterS3 && changed.IsChecked)
+                {
+                    FilterNEW.IsChecked = false;
+                    FilterS1.IsChecked = false;
+                    FilterS2.IsChecked = false;
+                }
+            }
+            else
+            {
+                FilterNEW.IsChecked = false;
+                FilterPRG.IsChecked = false;
+                FilterTRM.IsChecked = false;
+                FilterNEWPRG.IsChecked = false;
+                FilterS1.IsChecked = false;
+                FilterS2.IsChecked = false;
+                FilterS3.IsChecked = false;
+            }
+
+            if (FilterNEW.IsChecked || FilterPRG.IsChecked || FilterTRM.IsChecked || FilterNEWPRG.IsChecked ||
+                FilterS1.IsChecked || FilterS2.IsChecked || FilterS3.IsChecked)
+                rbsFilter.LargeImageSource = new BitmapImage(new Uri("Resources/FilterOff32.png", UriKind.Relative));
+            else
+                rbsFilter.LargeImageSource = new BitmapImage(new Uri("Resources/Filter32.png", UriKind.Relative));
+
+            gridTests.Items.Filter = null;
+            gridTests.Items.Filter = new Predicate<object>(t => TestFilter((Test)t));
+        }
+
+        private bool TestFilter(Test t)
+        {
+            return (
+                (!FilterNEW.IsChecked || t.status_cd == "NEW") &&
+                (!FilterPRG.IsChecked || t.status_cd == "PRG") &&
+                (!FilterTRM.IsChecked || t.status_cd == "TRM") &&
+                (!FilterNEWPRG.IsChecked || t.status_cd != "TRM") &&
+                (!FilterS1.IsChecked || t.LastStep == 1) &&
+                (!FilterS2.IsChecked || t.LastStep == 2) &&
+                (!FilterS3.IsChecked || t.LastStep == 3));
+        }
+
 
         private void bnImportImages_Click(object sender, RoutedEventArgs e)
         {
@@ -169,6 +256,12 @@ namespace EyetrackerExperiment
                 }
             }
 
+        }
+
+        private void gridTests_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            gridTests.RowDetailsVisibilityMode = gridTests.RowDetailsVisibilityMode == DataGridRowDetailsVisibilityMode.Collapsed ?
+                DataGridRowDetailsVisibilityMode.VisibleWhenSelected : DataGridRowDetailsVisibilityMode.Collapsed;
         }
     }
 }

@@ -101,7 +101,12 @@ namespace Data
                 {
                     Test.LastStep = Questionnaire.Step;
                     if (Test.NumSteps == Test.LastStep)
+                    {
                         Test.end_time = DateTime.Now;
+                        Test.status_cd = "TRM";
+                    }
+                    else if (Test.status_cd == "NEW")
+                        Test.status_cd = "PRG";
                     db.SaveChanges();
                 }
             }

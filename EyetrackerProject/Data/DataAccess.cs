@@ -118,12 +118,20 @@ namespace Data
         {
             Num = num; Type = stepType; Title = title; IsCompleted = isCompleted;
         }
+        public String Description
+        {
+            get
+            {
+                return String.Format("{0}. {1} - {2}",
+                    Num, Title, IsCompleted ? "Done" : "Pending");
+            }
+        }
     }
 
     public partial class Test
     {
         public int NumSteps { get { return Test_Definition.Questionnaire.Count() + (Test_Definition.Slide.Count > 0 ? 1 : 0); } }
-        /*
+        
         public List<Step> Steps
         {
             get
@@ -135,11 +143,12 @@ namespace Data
                 }
                 if (Test_Definition.Slide.Count > 0)
                     steps.Add(new Step(Test_Definition.EyeTrackerStep, Step.StepType.EyeTracker, "Eyetracker Experiment", Slide_Answer.Count > 0));
-                return steps;
+                return steps.OrderBy(s => s.Num).ToList();
 
             }
         }
-        */
+
+        public bool ShowDetails { get; set; }
     }
     public partial class Slide
     {
