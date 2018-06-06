@@ -18,7 +18,8 @@
         <Ribbon DockPanel.Dock="Top">
             <Ribbon.QuickAccessToolBar>
                 <RibbonQuickAccessToolBar>
-                    <RibbonButton Name="bnSettings" SmallImageSource="Resources/Settings32.png"  Click="bnSettings_Click" ToolTip="Change database connection"/>
+                    <RibbonButton Name="bnReload" SmallImageSource="Resources/Reload32.png"  Click="bnReload_Click" ToolTip="Change database connection"/>
+                    <RibbonButton Name="bnSave" SmallImageSource="Resources/save32.png"  Click="bnSave_Click" ToolTip="Change database connection"/>
                 </RibbonQuickAccessToolBar>
             </Ribbon.QuickAccessToolBar>
             <Ribbon.ApplicationMenu>
@@ -26,22 +27,36 @@
             </Ribbon.ApplicationMenu>
             <RibbonTab Header="Start">
                 <RibbonGroup Header="Manage Tests">
-                    <RibbonButton Label="Add Test" LargeImageSource="Resources/Settings32.png" Click="AddNewTest"/>
+                    <RibbonButton Label="Add New" LargeImageSource="Resources/Settings32.png" Click="AddNewTest"/>
+                    <RibbonButton Label="Delete" LargeImageSource="Resources/Settings32.png" Click="DeleteTest"/>
                 </RibbonGroup>
-                <RibbonGroup Header="Questionnaire">
-                    <RibbonButton Label="Execute Next" LargeImageSource="Resources/Settings32.png" Click="RunNextQuestionnaire"/>
+                <RibbonGroup Header="Steps">
+                    <RibbonButton Label="Execute Next" x:Name="rbnExecuteNext" LargeImageSource="Resources/Settings32.png" Click="RunNextStep"/>
+                    <RibbonButton Label="Delete Last" x:Name="rbnDeleteLast" LargeImageSource="Resources/Settings32.png" Click="DeleteLastStep"/>
                 </RibbonGroup> 
+            </RibbonTab>
+            <RibbonTab Header="Settings">
+                <RibbonGroup Header="Database">
+                    <RibbonButton Label="DB Connection" LargeImageSource="Resources/Database32.png" Click="bnDbSettings_Click"/>
+                </RibbonGroup>
+                <RibbonGroup Header="General">
+                    <RibbonButton Label="Path Settings" Click="bnPathSettings_Click"/>
+                    <RibbonButton Label="Eyetracker Settings" Click="bnEyetrackerSettings_Click"/>
+                    <RibbonButton Label="Import slide image files" Click="bnImportImages_Click"/>
+                </RibbonGroup>
             </RibbonTab>
 
         </Ribbon>
         <StatusBar DockPanel.Dock="Bottom" Height="25"/>
-        <DataGrid x:Name="gridTests" ItemsSource="{Binding tests}" AutoGenerateColumns="False">
+        <DataGrid x:Name="gridTests" ItemsSource="{Binding Tests}" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" AlternatingRowBackground="#FFF0FFC5" CanUserAddRows="False" CanUserResizeRows="False" EnableRowVirtualization="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Proband" Binding="{Binding Candidate.personal_code}"/>
                 <DataGridTextColumn Header="Test Typ" Binding="{Binding Test_Definition.Title}"/>
                 <DataGridTextColumn Header="Status" Binding="{Binding status_cd, Converter={StaticResource TestStatusConverter}}"/>
                 <DataGridTextColumn Header="Start" Binding="{Binding start_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}"/>
                 <DataGridTextColumn Header="Ende" Binding="{Binding end_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}" />
+                <DataGridTextColumn Header="Schritte" Binding="{Binding NumSteps}" />
+                <DataGridTextColumn Header="Abgeschlossen" Binding="{Binding LastStep}" />
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

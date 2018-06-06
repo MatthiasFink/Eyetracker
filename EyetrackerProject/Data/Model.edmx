@@ -35,7 +35,7 @@
           <Property Name="question_id" Type="int" Nullable="false" />
           <Property Name="num" Type="int" Nullable="false" />
           <Property Name="shortcut" Type="nvarchar" MaxLength="1" />
-          <Property Name="choice" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="choice" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="is_correct" Type="bit" />
         </EntityType>
         <EntityType Name="Question">
@@ -45,8 +45,8 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="questionnaire_id" Type="int" Nullable="false" />
           <Property Name="type_cd" Type="nchar" MaxLength="1" Nullable="false" />
-          <Property Name="num" Type="numeric" Precision="2" Scale="1" Nullable="false" />
-          <Property Name="question" Type="nvarchar" MaxLength="80" Nullable="false" />
+          <Property Name="num" Type="numeric" Precision="4" Scale="1" Nullable="false" />
+          <Property Name="question" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="correct_answer" Type="nvarchar" MaxLength="80" />
         </EntityType>
         <EntityType Name="Questionnaire">
@@ -58,6 +58,7 @@
           <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="1000" />
           <Property Name="Help" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Step" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Settings">
           <Key>
@@ -74,12 +75,13 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="test_definition_id" Type="int" Nullable="false" />
           <Property Name="num" Type="int" Nullable="false" />
-          <Property Name="title" Type="nvarchar" MaxLength="50" />
-          <Property Name="filepath" Type="nvarchar" MaxLength="200" />
+          <Property Name="title" Type="nvarchar" MaxLength="80" />
+          <Property Name="filepath" Type="nvarchar" MaxLength="250" />
           <Property Name="image" Type="varbinary(max)" />
           <Property Name="image_mime" Type="nvarchar" MaxLength="50" />
           <Property Name="duration" Type="int" />
           <Property Name="is_multiple_choice" Type="bit" Nullable="false" />
+          <Property Name="question" Type="nvarchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="Slide_Answer">
           <Key>
@@ -101,7 +103,7 @@
           <Property Name="slide_id" Type="int" Nullable="false" />
           <Property Name="shortcut" Type="nvarchar" MaxLength="1" Nullable="false" />
           <Property Name="num" Type="int" Nullable="false" />
-          <Property Name="choice" Type="nvarchar" MaxLength="50" />
+          <Property Name="choice" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="Test">
           <Key>
@@ -115,6 +117,7 @@
           <Property Name="test_group" Type="nvarchar" MaxLength="50" />
           <Property Name="comment" Type="nvarchar(max)" />
           <Property Name="status_cd" Type="nvarchar" MaxLength="3" Nullable="false" />
+          <Property Name="LastStep" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Test_Definition">
           <Key>
@@ -125,6 +128,7 @@
           <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Version" Type="smallint" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="EyeTrackerStep" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Tracking">
           <Key>
@@ -430,7 +434,7 @@
           <Property Name="question_id" Type="Int32" Nullable="false" />
           <Property Name="num" Type="Int32" Nullable="false" />
           <Property Name="shortcut" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="choice1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="choice1" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="is_correct" Type="Boolean" />
           <NavigationProperty Name="Answer" Relationship="Self.FK_Answer_Choice" FromRole="Choice" ToRole="Answer" />
           <NavigationProperty Name="Question" Relationship="Self.FK_Choice_Question" FromRole="Choice" ToRole="Question" />
@@ -442,8 +446,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="questionnaire_id" Type="Int32" Nullable="false" />
           <Property Name="type_cd" Type="String" MaxLength="1" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="num" Type="Decimal" Precision="2" Scale="1" Nullable="false" />
-          <Property Name="question1" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="num" Type="Decimal" Precision="4" Scale="1" Nullable="false" />
+          <Property Name="question1" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="correct_answer" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Answer" Relationship="Self.FK_Answer_Question" FromRole="Question" ToRole="Answer" />
           <NavigationProperty Name="Choice" Relationship="Self.FK_Choice_Question" FromRole="Question" ToRole="Choice" />
@@ -460,6 +464,7 @@
           <Property Name="Help" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Question" Relationship="Self.FK_Question_Questionnaire" FromRole="Questionnaire" ToRole="Question" />
           <NavigationProperty Name="Test_Definition" Relationship="Self.FK_Questionnaire_Questionnaire" FromRole="Questionnaire" ToRole="Test_Definition" />
+          <Property Name="Step" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Settings">
           <Key>
@@ -476,8 +481,8 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="test_definition_id" Type="Int32" Nullable="false" />
           <Property Name="num" Type="Int32" Nullable="false" />
-          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="filepath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="title" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="filepath" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="image" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="image_mime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="duration" Type="Int32" />
@@ -486,6 +491,7 @@
           <NavigationProperty Name="Slide_Choice" Relationship="Self.FK_Slide_Choice_Slide" FromRole="Slide" ToRole="Slide_Choice" />
           <NavigationProperty Name="Test_Definition" Relationship="Self.FK_Slide_Test_Definition" FromRole="Slide" ToRole="Test_Definition" />
           <NavigationProperty Name="Tracking" Relationship="Self.FK_Tracking_Slide" FromRole="Slide" ToRole="Tracking" />
+          <Property Name="question" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Slide_Answer">
           <Key>
@@ -510,7 +516,7 @@
           <Property Name="slide_id" Type="Int32" Nullable="false" />
           <Property Name="shortcut" Type="String" MaxLength="1" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="num" Type="Int32" Nullable="false" />
-          <Property Name="choice" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="choice" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Slide" Relationship="Self.FK_Slide_Choice_Slide" FromRole="Slide_Choice" ToRole="Slide" />
           <NavigationProperty Name="Slide_Answer" Relationship="Self.FK_Slide_Answer_Slide_Choice" FromRole="Slide_Choice" ToRole="Slide_Answer" />
         </EntityType>
@@ -531,6 +537,7 @@
           <NavigationProperty Name="Slide_Answer" Relationship="Self.FK_Slide_Answer_Test" FromRole="Test" ToRole="Slide_Answer" />
           <NavigationProperty Name="Test_Definition" Relationship="Self.FK_Test_Test_Definition" FromRole="Test" ToRole="Test_Definition" />
           <NavigationProperty Name="Tracking" Relationship="Self.FK_Tracking_Test" FromRole="Test" ToRole="Tracking" />
+          <Property Name="LastStep" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Test_Definition">
           <Key>
@@ -544,6 +551,7 @@
           <NavigationProperty Name="Questionnaire" Relationship="Self.FK_Questionnaire_Questionnaire" FromRole="Test_Definition" ToRole="Questionnaire" />
           <NavigationProperty Name="Slide" Relationship="Self.FK_Slide_Test_Definition" FromRole="Test_Definition" ToRole="Slide" />
           <NavigationProperty Name="Test" Relationship="Self.FK_Test_Test_Definition" FromRole="Test_Definition" ToRole="Test" />
+          <Property Name="EyeTrackerStep" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Tracking">
           <Key>
@@ -870,6 +878,7 @@
           <EntitySetMapping Name="Questionnaire">
             <EntityTypeMapping TypeName="EyetrackerModel.Questionnaire">
               <MappingFragment StoreEntitySet="Questionnaire">
+                <ScalarProperty Name="Step" ColumnName="Step" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Test_Definition_Id" ColumnName="Test_Definition_Id" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
@@ -890,6 +899,7 @@
           <EntitySetMapping Name="Slide">
             <EntityTypeMapping TypeName="EyetrackerModel.Slide">
               <MappingFragment StoreEntitySet="Slide">
+                <ScalarProperty Name="question" ColumnName="question" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="test_definition_id" ColumnName="test_definition_id" />
                 <ScalarProperty Name="num" ColumnName="num" />
@@ -929,6 +939,7 @@
           <EntitySetMapping Name="Test">
             <EntityTypeMapping TypeName="EyetrackerModel.Test">
               <MappingFragment StoreEntitySet="Test">
+                <ScalarProperty Name="LastStep" ColumnName="LastStep" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="test_definition_id" ColumnName="test_definition_id" />
                 <ScalarProperty Name="candidate_id" ColumnName="candidate_id" />
@@ -943,6 +954,7 @@
           <EntitySetMapping Name="Test_Definition">
             <EntityTypeMapping TypeName="EyetrackerModel.Test_Definition">
               <MappingFragment StoreEntitySet="Test_Definition">
+                <ScalarProperty Name="EyeTrackerStep" ColumnName="EyeTrackerStep" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="language" ColumnName="language" />
                 <ScalarProperty Name="Title" ColumnName="Title" />

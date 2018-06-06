@@ -32,22 +32,44 @@ namespace EyetrackerExperiment
             db = EyetrackerEntities.EyeTrackerDB;
 
             LoadData();
+            DataContext = db;
         }
 
         public void LoadData()
         {
             db.LoadAllCandidatesAndTests();
             DataContext = db;
-            gridTests.UpdateLayout();
         }
 
-        private void bnSettings_Click(object sender, RoutedEventArgs e)
+        private void bnDbSettings_Click(object sender, RoutedEventArgs e)
         {
             if (DBSettings.ConfigureDB().Value)
             {
                 LoadData();
             }
         }
+
+        private void bnPathSettings_Click(object sender, RoutedEventArgs e)
+        {
+            (new Configuration.PathConfig()).ShowDialog();
+        }
+
+        private void bnEyetrackerSettings_Click(object sender, RoutedEventArgs e)
+        {
+            (new Configuration.EyeTrackerConfig()).ShowDialog();
+        }
+
+        private void bnReload_Click(object sender, RoutedEventArgs e)
+        {
+            LoadData();
+        }
+
+        private void bnSave_Click(object sender, RoutedEventArgs e)
+        {
+            db.SaveChanges();
+        }
+
+
 
         private void AddNewTest(object sender, RoutedEventArgs e)
         {
@@ -65,23 +87,88 @@ namespace EyetrackerExperiment
             }
         }
 
-        private void RunNextQuestionnaire(object sender, RoutedEventArgs e)
+        private void DeleteTest(object sender, RoutedEventArgs e)
         {
             Test test = (Test)gridTests.SelectedItem;
-            Questionnaire questionnaire = null;
-            foreach (Questionnaire q in test.Test_Definition.Questionnaire)
+            if (test == null) return;
+
+            if (MessageBox.Show(String.Format(
+                "Really delete Test {0} for {1} with {2] steps completed out of {3}?", 
+                test.Test_Definition.Title,
+                test.Candidate.personal_code,
+                test.LastStep,
+                test.NumSteps), "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            { }
+        }
+
+        private void DeleteLastStep(object sender, RoutedEventArgs e)
+        {
+            Test test = (Test)gridTests.SelectedItem;
+            if (test == null || test.LastStep == 0) return;
+
+            if (test.Test_Definition.EyeTrackerStep == test.LastStep)
             {
-                if (test.Answer.Count(a => a.Question.Questionnaire == q) == 0)
+                List<Slide_Answer> toDelete = test.Slide_Answer.ToList();
+                foreach (Slide_Answer sa in toDelete)
+                    db.Slide_Answer.Remove(sa);
+            }
+            else
+            {
+                Questionnaire qu = test.Test_Definition.Questionnaire.FirstOrDefault(q => q.Step == test.LastStep);
+                if (qu != null)
                 {
-                    questionnaire = q;
-                    break;
+                    List<Answer> toDelete = test.Answer.Where(a => a.Question.Questionnaire == qu).ToList();
+                    foreach (Answer a in toDelete)
+                        db.Answer.Remove(a);
                 }
             }
-            if (questionnaire != null)
+            test.LastStep -= 1;
+            if (test.LastStep == 0)
             {
-                QuestionnaireWindow qw = new QuestionnaireWindow(db, test, questionnaire);
-                qw.Show();
+                test.start_time = null;
+                test.status_cd = "NEW";
             }
+            db.SaveChanges();
+        }
+
+        private void RunNextStep(object sender, RoutedEventArgs e)
+        {
+            Test test = (Test)gridTests.SelectedItem;
+            if (test == null) return;
+            if (test.LastStep + 1 == test.Test_Definition.EyeTrackerStep)
+            {
+                EyeTracking.PresentationWindow trackingWindow = new EyeTracking.PresentationWindow(db, test);
+            }
+            else
+            {
+                Questionnaire questionnaire = test.Test_Definition.Questionnaire.FirstOrDefault(q => q.Step == test.LastStep + 1);
+                if (questionnaire != null)
+                {
+                    QuestionnaireWindow qw = new QuestionnaireWindow(db, test, questionnaire);
+                    qw.Show();
+                }
+            }
+        }
+
+
+        private void bnImportImages_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Test_Definition td in db.TestDefinitions)
+            {
+                foreach (Slide s in td.Slide)
+                {
+                    if (s.image == null && s.filepath != null)
+                    {
+                        System.IO.FileStream bmStream = new System.IO.FileStream(s.filepath, System.IO.FileMode.Open);
+                        byte[] bmData = new byte[bmStream.Length];
+                        bmStream.Read(bmData, 0, (int)bmStream.Length);
+                        s.image = bmData;
+                        //s.filepath = null;
+                        db.SaveChanges();
+                    }
+                }
+            }
+
         }
     }
 }

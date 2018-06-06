@@ -29,8 +29,8 @@ namespace EyetrackerExperiment
             Db = db;
             Test = new Test { Candidate = new Candidate() };
             DataContext = Test;
-            cbTestDefinition.ItemsSource = db.testDefinitions;
-            if (db.testDefinitions.Count > 0)
+            cbTestDefinition.ItemsSource = db.TestDefinitions;
+            if (db.TestDefinitions.Count > 0)
                 cbTestDefinition.SelectedIndex = 0;
         }
 
@@ -91,7 +91,7 @@ namespace EyetrackerExperiment
                     Test.Candidate.age_range_high = a.rangeHigh;
             }
 
-            Candidate existing = Db.candidates.FirstOrDefault(c => c.personal_code == code);
+            Candidate existing = Db.Candidates.FirstOrDefault(c => c.personal_code == code);
             if (existing != null)
             {
                 Test.Candidate = existing;
@@ -100,11 +100,11 @@ namespace EyetrackerExperiment
             {
                 Test.Candidate.personal_code = code;
                 Db.Candidate.Add(Test.Candidate);
-                Db.candidates.Add(Test.Candidate);
+                Db.Candidates.Add(Test.Candidate);
             }
             Test.status_cd = "NEW";
             Db.Test.Add(Test);
-            Db.tests.Add(Test);
+            Db.Tests.Add(Test);
             DialogResult = true;
             Close();
         }

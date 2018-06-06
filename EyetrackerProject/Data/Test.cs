@@ -30,6 +30,7 @@ namespace Data
         public string test_group { get; set; }
         public string comment { get; set; }
         public string status_cd { get; set; }
+        public int LastStep { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Answer> Answer { get; set; }

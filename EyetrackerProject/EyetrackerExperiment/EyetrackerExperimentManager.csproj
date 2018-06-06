@@ -48,7 +48,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Entity.Design" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Controls.Ribbon" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -67,9 +69,46 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="QuestionnaireWindow.xaml.cs">
+    <Compile Include="Configuration\EyeTrackerConfig.xaml.cs">
+      <DependentUpon>EyeTrackerConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Configuration\FileDialogs.cs" />
+    <Compile Include="Configuration\PathConfig.xaml.cs">
+      <DependentUpon>PathConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EyeTracking\CalibrationWindow.xaml.cs">
+      <DependentUpon>CalibrationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EyeTracking\EyeTrackingController.cs" />
+    <Compile Include="EyeTracking\PresentationWindow.xaml.cs">
+      <DependentUpon>PresentationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EyeTracking\TutorialWindow.xaml.cs">
+      <DependentUpon>TutorialWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Questionnaire\QuestionnaireWindow.xaml.cs">
       <DependentUpon>QuestionnaireWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Configuration\EyeTrackerConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Configuration\PathConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EyeTracking\CalibrationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="EyeTracking\PresentationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="EyeTracking\TutorialWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -86,7 +125,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="QuestionnaireWindow.xaml">
+    <Page Include="Questionnaire\QuestionnaireWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -138,6 +177,52 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\ventum.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Calibration.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="EyeTracking\tut\0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="EyeTracking\tut\1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="EyeTracking\tut\2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="EyeTracking\tut\3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="EyeTracking\tut\4.PNG">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="EyeTracking\tut\5.PNG">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\thanks.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="EyeTracking\img\" />
+    <Folder Include="EyeTracking\ty\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Reload32.png" />
+    <Resource Include="Resources\save32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\edit-find.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Database32.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

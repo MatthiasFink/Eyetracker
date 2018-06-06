@@ -31,6 +31,7 @@ namespace Data
         public string image_mime { get; set; }
         public Nullable<int> duration { get; set; }
         public bool is_multiple_choice { get; set; }
+        public string question { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Slide_Answer> Slide_Answer { get; set; }

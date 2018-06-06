@@ -39,7 +39,7 @@ namespace Data
                 statusMsg.Content = "Connection to " + db.Database.Connection.Site + " successful";
                 statusBar.Background = Brushes.LightGreen;
                 statusToolTipTitle.Content = "Success";
-                statusToolTipText.Content = EyetrackerEntities.buildConnString();
+                statusToolTipText.Content = EyetrackerEntities.BuildConnString();
                 statusMsg.ToolTip = null;
                 bnOk.IsEnabled = true;
             }

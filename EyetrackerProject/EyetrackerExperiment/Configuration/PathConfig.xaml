@@ -1,0 +1,39 @@
+﻿<Window x:Class="EyetrackerExperiment.Configuration.PathConfig"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EyetrackerExperiment.Configuration"
+        xmlns:prop="clr-namespace:EyetrackerExperiment.Properties"
+        mc:Ignorable="d"
+        Title="Konfiguration Ablagepfade" Height="143.441" Width="471.988" SizeToContent="Height">
+    <Window.DataContext>
+        <prop:Settings/>
+    </Window.DataContext>
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Content="Ablage Antworten"/>
+        <TextBox Grid.Column="1" x:Name="tbAnswerPath" Text="{Binding AnswerPath}" Margin="0 5 0 5"/>
+        <Button Grid.Column="2" x:Name="bnSelectAnswerPath" Width="22" Height="22" HorizontalAlignment="Right" Click="bnSelectPath_Click">
+            <Image Source="..\Resources\edit-find.png" Margin="2"/>
+        </Button>
+        <Label Grid.Row="1" Content="Ablage Tracking Logs"/>
+        <TextBox Grid.Row="1" Grid.Column="1" x:Name="tbTrackingPath" Text="{Binding TrackingPath}" Margin="0 5 0 5" />
+        <Button Grid.Row="1" Grid.Column="2" x:Name="bnSelectTrackingPath" Width="22" Height="22" HorizontalAlignment="Right" Click="bnSelectPath_Click">
+            <Image Source="..\Resources\edit-find.png" Margin="2"/>
+        </Button>
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Abbrechen" IsCancel="True" Margin="5 10 5 0" Padding="5 3"/>
+            <Button Content="Ok" IsDefault="True" Margin="5 10 0 0" Padding="5 3" Click="bnOk_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
