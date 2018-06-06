@@ -47,6 +47,7 @@
                         <RibbonSplitMenuItem Header="Step 2" IsCheckable="True" x:Name="FilterS2"/>
                         <RibbonSplitMenuItem Header="Step 3" IsCheckable="True" x:Name="FilterS3"/>
                     </RibbonSplitButton>
+                    <RibbonButton Label="Reload Data" LargeImageSource="Resources/Reload32.png"  Click="bnReload_Click" ToolTip="Reload data from database to see al changes"/>
                 </RibbonGroup>
             </RibbonTab>
             <RibbonTab Header="Settings">
@@ -63,14 +64,19 @@
         </Ribbon>
         <StatusBar DockPanel.Dock="Bottom" Height="25"/>
         <DataGrid x:Name="gridTests" ItemsSource="{Binding Tests}" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" AlternatingRowBackground="#FFF0FFC5" CanUserAddRows="False" CanUserResizeRows="False" FrozenColumnCount="2" AreRowDetailsFrozen="True" RowDetailsVisibilityMode="Collapsed" MouseDoubleClick="gridTests_MouseDoubleClick">
+            <DataGrid.Resources>
+                <Style x:Key="TestTitleStyle" TargetType="TextBlock">
+                    <Setter Property="ToolTip" Value="{Binding Test_Definition.Description}"/>
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Proband" Binding="{Binding Candidate.personal_code}"/>
-                <DataGridTextColumn Header="Test Typ" Binding="{Binding Test_Definition.Title}" />
+                <DataGridTextColumn Header="Candidate" Binding="{Binding Candidate.personal_code}"/>
+                <DataGridTextColumn Header="Test Type" Binding="{Binding Test_Definition.Title}" ElementStyle="{StaticResource TestTitleStyle}" Width="*"/>
                 <DataGridTextColumn Header="Status" Binding="{Binding status_cd, Converter={StaticResource TestStatusConverter}}"/>
                 <DataGridTextColumn Header="Start" Binding="{Binding start_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}"/>
-                <DataGridTextColumn Header="Ende" Binding="{Binding end_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}" />
-                <DataGridTextColumn Header="Schritte" Binding="{Binding NumSteps}" />
-                <DataGridTextColumn Header="Abgeschlossen" Binding="{Binding LastStep}" />
+                <DataGridTextColumn Header="End" Binding="{Binding end_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}" />
+                <DataGridTextColumn Header="Steps" Binding="{Binding NumSteps}" />
+                <DataGridTextColumn Header="Completed" Binding="{Binding LastStep}" />
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
