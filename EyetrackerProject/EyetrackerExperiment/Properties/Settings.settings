@@ -11,8 +11,14 @@
     <Setting Name="AnswerPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\TEMP</Value>
     </Setting>
-    <Setting Name="TrackingPath" Type="System.String" Scope="User">
+    <Setting Name="TrackingPathLocal" Type="System.String" Scope="User">
       <Value Profile="(Default)">D:\\data\\openDoor</Value>
+    </Setting>
+    <Setting Name="TrackingPathRemote" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\\ventum.de\Data\VentumData\Scans\MUC1</Value>
+    </Setting>
+    <Setting Name="TrackingImportAuto" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

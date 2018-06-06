@@ -1,4 +1,5 @@
 ﻿using Data;
+using EyetrackerExperiment.EyeTracking;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -93,12 +94,19 @@ namespace EyetrackerExperiment
             if (test == null) return;
 
             if (MessageBox.Show(String.Format(
-                "Really delete Test {0} for {1} with {2] steps completed out of {3}?", 
+                "Really delete Test \"{0}\" for {1} with {2} steps completed out of {3}?", 
                 test.Test_Definition.Title,
                 test.Candidate.personal_code,
                 test.LastStep,
                 test.NumSteps), "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            { }
+            {
+                db.Answer.RemoveRange(test.Answer);
+                db.Slide_Answer.RemoveRange(test.Slide_Answer);
+                db.Tracking.RemoveRange(test.Tracking);
+                db.Test.Remove(test);
+                db.Tests.Remove(test);
+                db.SaveChanges();
+            }
         }
 
         private void DeleteLastStep(object sender, RoutedEventArgs e)
@@ -108,18 +116,18 @@ namespace EyetrackerExperiment
 
             if (test.Test_Definition.EyeTrackerStep == test.LastStep)
             {
-                List<Slide_Answer> toDelete = test.Slide_Answer.ToList();
-                foreach (Slide_Answer sa in toDelete)
-                    db.Slide_Answer.Remove(sa);
+                db.Slide_Answer.RemoveRange(test.Slide_Answer);
+                test.Slide_Answer.Clear();
+                db.Tracking.RemoveRange(test.Tracking);
+                test.Tracking.Clear();
             }
             else
             {
                 Questionnaire qu = test.Test_Definition.Questionnaire.FirstOrDefault(q => q.Step == test.LastStep);
                 if (qu != null)
                 {
-                    List<Answer> toDelete = test.Answer.Where(a => a.Question.Questionnaire == qu).ToList();
-                    foreach (Answer a in toDelete)
-                        db.Answer.Remove(a);
+                    db.Answer.RemoveRange(test.Answer);
+                    test.Answer.Clear();
                 }
             }
             test.LastStep -= 1;
@@ -262,6 +270,51 @@ namespace EyetrackerExperiment
         {
             gridTests.RowDetailsVisibilityMode = gridTests.RowDetailsVisibilityMode == DataGridRowDetailsVisibilityMode.Collapsed ?
                 DataGridRowDetailsVisibilityMode.VisibleWhenSelected : DataGridRowDetailsVisibilityMode.Collapsed;
+        }
+
+        private void bnImportTrackingCurrent_Click(object sender, RoutedEventArgs e)
+        {
+            Test test = (Test)gridTests.SelectedItem;
+            if (test == null) return;
+            if (test.LastStep < test.Test_Definition.EyeTrackerStep) return;
+
+            bool MergeReplace = false;
+            if (test.Tracking.Count > 0)
+            {
+                if (MessageBox.Show("Test also contains tracking data. Do you want to merge/replace existing data?",
+                    "Confirmation",
+                    MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    MergeReplace = true;
+                }
+                else return;
+            }
+
+            Properties.Settings settings = new Properties.Settings();
+            String fullPattern = String.Format(EyeTracking.PresentationWindow.TrackingFilePattern,
+                settings.TrackingPathRemote,
+                test.Candidate.personal_code,
+                test.id,
+                "*");
+            String initialDirectory = System.IO.Path.GetDirectoryName(fullPattern);
+            String filter = System.IO.Path.GetFileName(fullPattern);
+            filter = "idf tracking for " + test.Candidate.personal_code + "|" + filter + "|" +
+                    "txt tracking for " + test.Candidate.personal_code + "|" + filter.Replace(".idf", ".txt");
+            String[] fileNames = Configuration.FileDialogs.SelectFiles(initialDirectory, filter);
+            if (fileNames != null)
+            {
+                TrackingReader trackingReader = new TrackingReader(db, test);
+                foreach (String fileName in fileNames)
+                {
+                    trackingReader.Read(fileName);
+                }
+            }
+
+        }
+
+        private void bnImportTrackingMissing_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

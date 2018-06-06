@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:EyetrackerExperiment.Configuration"
         xmlns:prop="clr-namespace:EyetrackerExperiment.Properties"
         mc:Ignorable="d"
-        Title="Konfiguration Ablagepfade" Height="143.441" Width="471.988" SizeToContent="Height">
+        Title="Path Configuration" Height="191.441" Width="569.321" SizeToContent="Height">
     <Window.DataContext>
         <prop:Settings/>
     </Window.DataContext>
@@ -20,20 +20,28 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Content="Ablage Antworten"/>
+        <Label Content="Answer Files"/>
         <TextBox Grid.Column="1" x:Name="tbAnswerPath" Text="{Binding AnswerPath}" Margin="0 5 0 5"/>
         <Button Grid.Column="2" x:Name="bnSelectAnswerPath" Width="22" Height="22" HorizontalAlignment="Right" Click="bnSelectPath_Click">
             <Image Source="..\Resources\edit-find.png" Margin="2"/>
         </Button>
-        <Label Grid.Row="1" Content="Ablage Tracking Logs"/>
-        <TextBox Grid.Row="1" Grid.Column="1" x:Name="tbTrackingPath" Text="{Binding TrackingPath}" Margin="0 5 0 5" />
-        <Button Grid.Row="1" Grid.Column="2" x:Name="bnSelectTrackingPath" Width="22" Height="22" HorizontalAlignment="Right" Click="bnSelectPath_Click">
+        <Label Grid.Row="1" Content="Eyetracker saves to"/>
+        <TextBox Grid.Row="1" Grid.Column="1" x:Name="tbTrackingPathLocal" Text="{Binding TrackingPathLocal}" Margin="0 5 0 5" />
+        <Button Grid.Row="1" Grid.Column="2" x:Name="bnSelectTrackingPathLocal" Width="22" Height="22" HorizontalAlignment="Right" Click="bnSelectPath_Click">
             <Image Source="..\Resources\edit-find.png" Margin="2"/>
         </Button>
-        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Abbrechen" IsCancel="True" Margin="5 10 5 0" Padding="5 3"/>
-            <Button Content="Ok" IsDefault="True" Margin="5 10 0 0" Padding="5 3" Click="bnOk_Click"/>
+        <Label Grid.Row="2" Content="Load Eyetracker data from"/>
+        <TextBox Grid.Row="2" Grid.Column="1" x:Name="tbTrackingPathRemote" Text="{Binding TrackingPathRemote}" Margin="0 5 0 5" />
+        <Button Grid.Row="2" Grid.Column="2" x:Name="bnSelectTrackingPathRemote" Width="22" Height="22" HorizontalAlignment="Right" Click="bnSelectPath_Click">
+            <Image Source="..\Resources\edit-find.png" Margin="2"/>
+        </Button>
+        <CheckBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Content="Run automated import of tracking data after experiment" IsChecked="{Binding TrackingImportAuto}"/>
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Cancel" IsCancel="True" Margin="5 10 5 0" Padding="20 3"/>
+            <Button Content="Save" IsDefault="True" Margin="5 10 0 0" Padding="20 3" Click="bnOk_Click"/>
         </StackPanel>
     </Grid>
 </Window>

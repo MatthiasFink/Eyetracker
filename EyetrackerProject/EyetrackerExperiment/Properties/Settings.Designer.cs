@@ -62,12 +62,36 @@ namespace EyetrackerExperiment.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("D:\\\\data\\\\openDoor")]
-        public string TrackingPath {
+        public string TrackingPathLocal {
             get {
-                return ((string)(this["TrackingPath"]));
+                return ((string)(this["TrackingPathLocal"]));
             }
             set {
-                this["TrackingPath"] = value;
+                this["TrackingPathLocal"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\ventum.de\\Data\\VentumData\\Scans\\MUC1")]
+        public string TrackingPathRemote {
+            get {
+                return ((string)(this["TrackingPathRemote"]));
+            }
+            set {
+                this["TrackingPathRemote"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TrackingImportAuto {
+            get {
+                return ((bool)(this["TrackingImportAuto"]));
+            }
+            set {
+                this["TrackingImportAuto"] = value;
             }
         }
     }

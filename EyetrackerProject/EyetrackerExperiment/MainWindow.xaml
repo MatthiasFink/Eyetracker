@@ -50,6 +50,13 @@
                     <RibbonButton Label="Reload Data" LargeImageSource="Resources/Reload32.png"  Click="bnReload_Click" ToolTip="Reload data from database to see al changes"/>
                 </RibbonGroup>
             </RibbonTab>
+            <RibbonTab Header="Tracking Data">
+                <RibbonGroup Header="Import Tracking Data">
+                    <RibbonButton Label="Current Test" LargeImageSource="Resources/Database32.png" Click="bnImportTrackingCurrent_Click"/>
+                    <RibbonButton Label="Scan for missing" LargeImageSource="Resources/Database32.png" Click="bnImportTrackingMissing_Click"/>
+                </RibbonGroup>
+                
+            </RibbonTab>
             <RibbonTab Header="Settings">
                 <RibbonGroup Header="Database">
                     <RibbonButton Label="DB Connection" LargeImageSource="Resources/Database32.png" Click="bnDbSettings_Click"/>

@@ -18,5 +18,18 @@ namespace EyetrackerExperiment.Configuration
             else
                 return null;
         }
+
+        public static String[] SelectFiles(String initialPath, String filter)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.InitialDirectory = initialPath;
+            dlg.Filter = filter;
+            dlg.CheckFileExists = true;
+            dlg.Multiselect = true;
+            if (dlg.ShowDialog() == DialogResult.OK)
+                return dlg.FileNames;
+            else
+                return null;
+        }
     }
 }

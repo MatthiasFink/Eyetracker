@@ -134,13 +134,20 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="test_id" Type="int" Nullable="false" />
           <Property Name="slide_id" Type="int" Nullable="false" />
           <Property Name="occurred" Type="datetime" Nullable="false" />
-          <Property Name="x" Type="numeric" Precision="9" Scale="0" Nullable="false" />
-          <Property Name="y" Type="numeric" Precision="9" Scale="0" Nullable="false" />
-          <Property Name="diameter" Type="numeric" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="x" Type="numeric" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="y" Type="numeric" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="dia_x" Type="numeric" Precision="6" Scale="2" />
+          <Property Name="dia_y" Type="numeric" Precision="6" Scale="2" />
+          <Property Name="cr_x" Type="numeric" Precision="9" Scale="2" />
+          <Property Name="cr_y" Type="numeric" Precision="9" Scale="2" />
+          <Property Name="por_x" Type="numeric" Precision="9" Scale="2" />
+          <Property Name="por_y" Type="numeric" Precision="9" Scale="2" />
+          <Property Name="timing" Type="int" />
+          <Property Name="trigger" Type="int" />
         </EntityType>
         <Association Name="FK_Answer_Choice">
           <End Role="Choice" Type="Self.Choice" Multiplicity="0..1" />
@@ -561,11 +568,18 @@
           <Property Name="test_id" Type="Int32" Nullable="false" />
           <Property Name="slide_id" Type="Int32" Nullable="false" />
           <Property Name="occurred" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="x" Type="Decimal" Precision="9" Scale="0" Nullable="false" />
-          <Property Name="y" Type="Decimal" Precision="9" Scale="0" Nullable="false" />
-          <Property Name="diameter" Type="Decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="x" Type="Decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="y" Type="Decimal" Precision="9" Scale="2" Nullable="false" />
           <NavigationProperty Name="Slide" Relationship="Self.FK_Tracking_Slide" FromRole="Tracking" ToRole="Slide" />
           <NavigationProperty Name="Test" Relationship="Self.FK_Tracking_Test" FromRole="Tracking" ToRole="Test" />
+          <Property Name="dia_x" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="dia_y" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="cr_x" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="cr_y" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="por_x" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="por_y" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="timing" Type="Int32" />
+          <Property Name="trigger" Type="Int32" />
         </EntityType>
         <Association Name="FK_Answer_Choice">
           <End Role="Choice" Type="Self.Choice" Multiplicity="0..1" />
@@ -966,13 +980,20 @@
           <EntitySetMapping Name="Tracking">
             <EntityTypeMapping TypeName="EyetrackerModel.Tracking">
               <MappingFragment StoreEntitySet="Tracking">
+                <ScalarProperty Name="trigger" ColumnName="trigger" />
+                <ScalarProperty Name="timing" ColumnName="timing" />
+                <ScalarProperty Name="por_y" ColumnName="por_y" />
+                <ScalarProperty Name="por_x" ColumnName="por_x" />
+                <ScalarProperty Name="cr_y" ColumnName="cr_y" />
+                <ScalarProperty Name="cr_x" ColumnName="cr_x" />
+                <ScalarProperty Name="dia_y" ColumnName="dia_y" />
+                <ScalarProperty Name="dia_x" ColumnName="dia_x" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="test_id" ColumnName="test_id" />
                 <ScalarProperty Name="slide_id" ColumnName="slide_id" />
                 <ScalarProperty Name="occurred" ColumnName="occurred" />
                 <ScalarProperty Name="x" ColumnName="x" />
                 <ScalarProperty Name="y" ColumnName="y" />
-                <ScalarProperty Name="diameter" ColumnName="diameter" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

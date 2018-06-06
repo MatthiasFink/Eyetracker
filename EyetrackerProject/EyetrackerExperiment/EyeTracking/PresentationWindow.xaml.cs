@@ -22,13 +22,7 @@ namespace EyetrackerExperiment.EyeTracking
         public Test Test { get; set; }
         public EyetrackerEntities Db;
         String subjName;
-        String path;
-        String pathTime;
-        String answer;
-        String answerTime;
-        String answerBase = Properties.Settings.Default.AnswerPath;
-        String trackingBase = Properties.Settings.Default.TrackingPath;
-
+        String trackingBase = Properties.Settings.Default.TrackingPathLocal;
 
         BitmapImage actCaliImg;
         bool cali = false;
@@ -41,12 +35,6 @@ namespace EyetrackerExperiment.EyeTracking
         Stopwatch overall = new Stopwatch();
         Stopwatch timer = new Stopwatch();
         Timer fixationTimer = new Timer(1000);
-
-        String timeOverall;
-        TimeSpan overallTS;
-
-        String time;
-        TimeSpan ts;
 
         EyeTrackingController eyeTracker;
 
@@ -85,6 +73,16 @@ namespace EyetrackerExperiment.EyeTracking
             NextSlide();
         }
 
+        public static String TrackingFilePattern = "{0}\\{1}-{2}-{3}.idf"; // Public static, da auch beim Einlesen verwendbar
+
+        private String localTrackingFile
+        {
+            get
+            {
+                return String.Format(TrackingFilePattern, trackingBase, subjName, Test.id, slides[slideNum].num);
+            }
+        }
+
         private void hideFixationScreen(Object sender, ElapsedEventArgs e)
         {
             fixationTimer.Stop();
@@ -106,7 +104,7 @@ namespace EyetrackerExperiment.EyeTracking
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
             eyeTracker.StopTracking();
-            eyeTracker.SaveTracking(String.Format("{2}\\{0}_{1}.idf", subjName, slideNum, trackingBase));
+            eyeTracker.SaveTracking(localTrackingFile);
             eyeTracker.ClearTracking();
             eyeTracker.Stop();
 
@@ -181,7 +179,7 @@ namespace EyetrackerExperiment.EyeTracking
         private void ProcessAnswer(char c)
         {
             eyeTracker.StopTracking();
-            eyeTracker.SaveTracking(String.Format("{2}\\{0}_{1}.idf", subjName, slideNum, trackingBase));
+            eyeTracker.SaveTracking(localTrackingFile);
             eyeTracker.ClearTracking();
 
             foreach (Slide_Choice sc in slides[slideNum].Slide_Choice)

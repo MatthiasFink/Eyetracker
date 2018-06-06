@@ -20,7 +20,14 @@ namespace Data
         public System.DateTime occurred { get; set; }
         public decimal x { get; set; }
         public decimal y { get; set; }
-        public decimal diameter { get; set; }
+        public Nullable<decimal> dia_x { get; set; }
+        public Nullable<decimal> dia_y { get; set; }
+        public Nullable<decimal> cr_x { get; set; }
+        public Nullable<decimal> cr_y { get; set; }
+        public Nullable<decimal> por_x { get; set; }
+        public Nullable<decimal> por_y { get; set; }
+        public Nullable<int> timing { get; set; }
+        public Nullable<int> trigger { get; set; }
     
         public virtual Slide Slide { get; set; }
         public virtual Test Test { get; set; }

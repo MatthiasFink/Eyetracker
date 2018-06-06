@@ -49,6 +49,7 @@
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Controls.Ribbon" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -83,6 +84,7 @@
     <Compile Include="EyeTracking\PresentationWindow.xaml.cs">
       <DependentUpon>PresentationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EyeTracking\TrackingReader.cs" />
     <Compile Include="EyeTracking\TutorialWindow.xaml.cs">
       <DependentUpon>TutorialWindow.xaml</DependentUpon>
     </Compile>
