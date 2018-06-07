@@ -85,7 +85,7 @@ namespace EyetrackerExperiment
             if (Test.Test_Definition == null)
                 return;
 
-            foreach (AgeRange a in Db.ageRanges)
+            foreach (AgeRange a in EyetrackerEntities.ageRanges)
             {
                 if (Test.Candidate.age_range_low == a.rangeLow)
                     Test.Candidate.age_range_high = a.rangeHigh;
@@ -105,6 +105,7 @@ namespace EyetrackerExperiment
             Test.status_cd = "NEW";
             Db.Test.Add(Test);
             Db.Tests.Add(Test);
+            Db.SaveChanges();
             DialogResult = true;
             Close();
         }

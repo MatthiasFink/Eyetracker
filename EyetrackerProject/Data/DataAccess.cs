@@ -16,11 +16,21 @@ namespace Data
     public class Tests : ObservableCollection<Test> { }
     public class Candidates : ObservableCollection<Candidate> { }
     public class TestDefinitions : ObservableCollection<Test_Definition> { }
+
     public class AgeRange
     {
         public String name;
         public int rangeLow;
         public int rangeHigh;
+        public override String ToString()
+        {
+            if (rangeLow == 0)
+                return "under " + rangeHigh;
+            else if (rangeHigh == 99)
+                return "above " + rangeLow;
+            else
+                return "between " + rangeLow + " and " + rangeHigh;
+        }
     }
 
     public partial class EyetrackerEntities : DbContext
@@ -97,7 +107,7 @@ namespace Data
             }
         }
 
-        public List<AgeRange> ageRanges = new List<AgeRange>()
+        public static List<AgeRange> ageRanges = new List<AgeRange>()
         {
             new AgeRange() {name="0", rangeLow=0, rangeHigh=24 },
             new AgeRange() {name="25", rangeLow=25, rangeHigh=35 },
@@ -150,6 +160,20 @@ namespace Data
 
         public bool ShowDetails { get; set; }
     }
+
+    public partial class Candidate
+    {
+        public String Description
+        {
+            get
+            {
+                return String.Format("Age: {0}, Gender: {1}",
+                       EyetrackerEntities.ageRanges.FirstOrDefault(a => a.rangeLow == age_range_low).ToString(),
+                       gender == "M" ? "male" : (gender == "F" ? "female" : "unknown"));
+            }
+        }
+    }
+
     public partial class Slide
     {
         public Image SlideImage

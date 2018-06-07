@@ -1,10 +1,26 @@
-﻿<Window x:Class="EyeTrackingDemo.TutorialWindow"
+﻿<Window x:Class="EyetrackerExperiment.EyeTracking.TutorialWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="tutorial presentation" Height="300" Width="300" PreviewKeyUp="Window_PreviewKeyUp">
 	<Grid>
-		<Image x:Name="StimulusPane"/>
-		<Canvas x:Name="FixationPane"/>
-
-	</Grid>
+		<Image x:Name="StimulusPane" Source="tut/0.png"/>
+        <Grid x:Name="FixationPane" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" Visibility="Hidden">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="6"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Rectangle Grid.Column="2" Grid.Row="1" Grid.RowSpan="3" Fill="Black"/>
+            <Rectangle Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" Fill="Black"/>
+        </Grid>
+    </Grid>
 </Window>

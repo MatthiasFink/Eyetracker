@@ -22,7 +22,7 @@ namespace EyetrackerExperiment.EyeTracking
         public Test Test { get; set; }
         public EyetrackerEntities Db;
         String subjName;
-        String trackingBase = Properties.Settings.Default.TrackingPathLocal;
+        String trackingBase;
 
         BitmapImage actCaliImg;
         bool cali = false;
@@ -52,6 +52,9 @@ namespace EyetrackerExperiment.EyeTracking
 
             subjName = test.Candidate.personal_code;
 
+            Properties.Settings settings = new Properties.Settings();
+            trackingBase = settings.TrackingPathLocal;
+
             WindowState = WindowState.Maximized;
             WindowStyle = WindowStyle.None;
             Topmost = true;
@@ -59,8 +62,8 @@ namespace EyetrackerExperiment.EyeTracking
 
             actCaliImg = new BitmapImage(new Uri("..\\Resources\\Calibration.png", UriKind.RelativeOrAbsolute));
 
-            String Ip = Properties.Settings.Default.EyetrackerIP;
-            int Port = Properties.Settings.Default.EyetrackerPort;
+            String Ip = settings.EyetrackerIP;
+            int Port = settings.EyetrackerPort;
             eyeTracker = new EyeTrackingController(Ip, Port);
             eyeTracker.Start();
 
@@ -153,7 +156,7 @@ namespace EyetrackerExperiment.EyeTracking
 
         private bool NextSlide()
         {
-            if (slideNum  +  1 >= slides.Count - 1)
+            if (slideNum >= slides.Count - 1)
                 return false;
 
             if ((slideNum + 2) % 8 == 0 && !cali)
@@ -202,12 +205,29 @@ namespace EyetrackerExperiment.EyeTracking
             }
         }
 
+        private void Reactivated(object sender, EventArgs e)
+        {
+            WindowState = WindowState.Maximized;
+            Topmost = true;
+            if (!cali)
+                eyeTracker.StartTracking();
+        }
+
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
                 AbortExperiment();
                 return;
+            }
+
+            if (e.Key == Key.F1)
+            {
+                Topmost = false;
+                new TutorialWindow();
+                Activated += Reactivated;
+                if (!cali)
+                    eyeTracker.StopTracking();
             }
 
             if (cali)
@@ -219,18 +239,15 @@ namespace EyetrackerExperiment.EyeTracking
             {
                 char c = (char)((int)'0' + (e.Key - Key.D0));
                 if (shortCuts.Contains(c))
-                {
                     ProcessAnswer(c);
-                }
             }
             else if (e.Key >= Key.A && e.Key <= Key.Z)
             {
                 char c = (char)((int)'A' + (e.Key - Key.A));
                 if (shortCuts.Contains(c))
-                {
                     ProcessAnswer(c);
-                }
             }
         }
+
     }
 }

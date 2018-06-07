@@ -27,20 +27,21 @@ namespace EyetrackerExperiment.EyeTracking
             MalformedFileName = -3,
             WrongCandidate = -4,
             WrongTest = -5,
-            UnsupportedFileFormat
+            UnsupportedFileFormat = -6,
+            DataPresent = -7
         }
 
-        public int Read(String filePath)
+        public int Read(String filePath, bool mergeReplace)
         {
             if (filePath.ToUpper().EndsWith(".IDF"))
                 return (int)ReturnCodes.UnsupportedFileFormat;
             else if (filePath.ToUpper().EndsWith(".TXT"))
-                return ReadText(filePath);
+                return ReadText(filePath, mergeReplace);
             else
                 return (int)ReturnCodes.WrongFileExtension;
         }
 
-        public int ReadText(String filePath, bool forceExtension = false)
+        public int ReadText(String filePath, bool mergeReplace, bool forceExtension = false)
         {
             int numWritten = 0;
 
@@ -72,8 +73,14 @@ namespace EyetrackerExperiment.EyeTracking
             if (slideAnswer == null)
                 return (int)ReturnCodes.MalformedFileName;
 
-            db.Tracking.RemoveRange(test.Tracking.Where(t => t.Slide == slideAnswer.Slide));
-
+            if (test.Tracking.Count(t => t.Slide == slideAnswer.Slide) > 0)
+            {
+                if (mergeReplace)
+                {
+                    db.Tracking.RemoveRange(test.Tracking.Where(t => t.Slide == slideAnswer.Slide));
+                }
+                else return (int)ReturnCodes.DataPresent;
+            }
 
             StreamReader sr = new StreamReader(filePath, true);
             String line;
@@ -83,7 +90,6 @@ namespace EyetrackerExperiment.EyeTracking
             NumberFormatInfo formatter = (NumberFormatInfo)NumberFormatInfo.CurrentInfo.Clone();
             formatter.NumberDecimalSeparator = ".";
             formatter.NumberGroupSeparator = ",";
-
 
             while (!sr.EndOfStream)
             {

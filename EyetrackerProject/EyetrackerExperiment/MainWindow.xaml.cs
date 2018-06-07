@@ -278,14 +278,14 @@ namespace EyetrackerExperiment
             if (test == null) return;
             if (test.LastStep < test.Test_Definition.EyeTrackerStep) return;
 
-            bool MergeReplace = false;
+            bool mergeReplace = false;
             if (test.Tracking.Count > 0)
             {
                 if (MessageBox.Show("Test also contains tracking data. Do you want to merge/replace existing data?",
                     "Confirmation",
                     MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    MergeReplace = true;
+                    mergeReplace = true;
                 }
                 else return;
             }
@@ -306,7 +306,7 @@ namespace EyetrackerExperiment
                 TrackingReader trackingReader = new TrackingReader(db, test);
                 foreach (String fileName in fileNames)
                 {
-                    trackingReader.Read(fileName);
+                    trackingReader.Read(fileName, mergeReplace);
                 }
             }
 

@@ -43,7 +43,7 @@ namespace EyeTrackingDemo
 
         private void tut_Click(object sender, RoutedEventArgs e)
         {
-            TutorialWindow tutWin = new TutorialWindow(this.subjectName.Text);
+            TutorialWindow tutWin = new TutorialWindow();
         }
 
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)

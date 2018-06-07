@@ -154,9 +154,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Calibration\Calibration.png" />
-    <Content Include="Cross\Cross.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="imgDe\0.PNG">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
