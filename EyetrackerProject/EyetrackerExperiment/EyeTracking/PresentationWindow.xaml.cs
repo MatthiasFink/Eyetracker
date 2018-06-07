@@ -55,11 +55,6 @@ namespace EyetrackerExperiment.EyeTracking
             Properties.Settings settings = new Properties.Settings();
             trackingBase = settings.TrackingPathLocal;
 
-            WindowState = WindowState.Maximized;
-            WindowStyle = WindowStyle.None;
-            Topmost = true;
-            Show();
-
             actCaliImg = new BitmapImage(new Uri("..\\Resources\\Calibration.png", UriKind.RelativeOrAbsolute));
 
             String Ip = settings.EyetrackerIP;
@@ -72,8 +67,25 @@ namespace EyetrackerExperiment.EyeTracking
             fixationTimer.Elapsed += hideFixationScreen;
 
             slideNum = -1;
-            overall.Start();
             NextSlide();
+
+
+            WindowState = WindowState.Normal;
+            WindowStyle = WindowStyle.None;
+            Topmost = true;
+
+            System.Windows.Forms.Screen screen = System.Windows.Forms.Screen.AllScreens.FirstOrDefault(s => !s.Primary);
+            if (screen != null)
+            {
+                Top = screen.WorkingArea.Top;
+                Left = screen.WorkingArea.Left;
+                Width = screen.WorkingArea.Width;
+                Height = screen.WorkingArea.Height;
+            }
+            Show();
+            WindowState = WindowState.Maximized;
+
+            overall.Start();
         }
 
         public static String TrackingFilePattern = "{0}\\{1}-{2}-{3}.idf"; // Public static, da auch beim Einlesen verwendbar
@@ -208,6 +220,7 @@ namespace EyetrackerExperiment.EyeTracking
         private void Reactivated(object sender, EventArgs e)
         {
             WindowState = WindowState.Maximized;
+            Activated -= Reactivated;
             Topmost = true;
             if (!cali)
                 eyeTracker.StartTracking();

@@ -75,9 +75,12 @@
                 <Style x:Key="TestTitleStyle" TargetType="TextBlock">
                     <Setter Property="ToolTip" Value="{Binding Test_Definition.Description}"/>
                 </Style>
+                <Style x:Key="CandidateStyle" TargetType="TextBlock">
+                    <Setter Property="ToolTip" Value="{Binding Candidate.Description}"/>
+                </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Candidate" Binding="{Binding Candidate.personal_code}"/>
+                <DataGridTextColumn Header="Candidate" Binding="{Binding Candidate.personal_code}" ElementStyle="{StaticResource CandidateStyle}"/>
                 <DataGridTextColumn Header="Test Type" Binding="{Binding Test_Definition.Title}" ElementStyle="{StaticResource TestTitleStyle}" Width="*"/>
                 <DataGridTextColumn Header="Status" Binding="{Binding status_cd, Converter={StaticResource TestStatusConverter}}"/>
                 <DataGridTextColumn Header="Start" Binding="{Binding start_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}"/>

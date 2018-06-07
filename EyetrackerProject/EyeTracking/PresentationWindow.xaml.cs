@@ -27,7 +27,6 @@ namespace EyeTrackingDemo
     {
 
         String subjName;
-        String imageName;
         String path;
         String pathTime;
         String answer;

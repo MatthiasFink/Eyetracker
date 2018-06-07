@@ -30,19 +30,15 @@ namespace EyetrackerExperiment.EyeTracking
         {
             InitializeComponent();
 
-            WindowState = WindowState.Maximized;
-            WindowStyle = WindowStyle.None;
-            Topmost = true;
-            Show();
 
             int i = 0;
             while (true)
             {
-                
-                BitmapImage image = new BitmapImage(new Uri("/tut/" + i++ + ".png", UriKind.RelativeOrAbsolute));
                 double width = 0;
+                BitmapImage image = null;
                 try
                 {
+                    image = new BitmapImage(new Uri("pack://application:,,,/EyetrackerExperiment;component/eyetracking/tut/" + i++ + ".png"));
                     width = image.Width;
                 }
                 catch (Exception)
@@ -53,6 +49,20 @@ namespace EyetrackerExperiment.EyeTracking
                 else
                     break;
             }
+
+            WindowStyle = WindowStyle.None;
+            Topmost = true;
+            System.Windows.Forms.Screen screen = System.Windows.Forms.Screen.AllScreens.FirstOrDefault(s => !s.Primary);
+            if (screen != null)
+            {
+                Top = screen.WorkingArea.Top;
+                Left = screen.WorkingArea.Left;
+                Width = screen.WorkingArea.Width;
+                Height = screen.WorkingArea.Height;
+            }
+            Show();
+            WindowState = WindowState.Maximized;
+
             if (images.Count > 0)
                 StimulusPane.Source = images[imageNum];
             else
@@ -71,7 +81,7 @@ namespace EyetrackerExperiment.EyeTracking
                 case Key.Space:
                 case Key.J:
                 case Key.F:
-                    if (imageNum >= images.Count)
+                    if (imageNum >= images.Count - 1)
                     {
                         Mouse.OverrideCursor = null;
                         Close();
