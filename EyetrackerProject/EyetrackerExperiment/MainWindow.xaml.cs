@@ -293,7 +293,7 @@ namespace EyetrackerExperiment
             if (test.LastStep < test.Test_Definition.EyeTrackerStep) return;
 
             bool mergeReplace = false;
-            if (test.Tracking.Count > 0)
+            if (test.HasTracking)
             {
                 if (MessageBox.Show("Test also contains tracking data. Do you want to merge/replace existing data?",
                     "Confirmation",
