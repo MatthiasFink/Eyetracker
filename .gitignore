@@ -1,8 +1,8 @@
 ﻿################################################################################
 # Diese .gitignore-Datei wurde von Microsoft(R) Visual Studio automatisch erstellt.
 ################################################################################
-
 /.vs
+/EyetrackerProject/.vs
 /EyetrackerProject/.vs/EyetrackerExperiment/v15
 /EyetrackerProject/Data/obj
 /EyetrackerProject/Data/bin

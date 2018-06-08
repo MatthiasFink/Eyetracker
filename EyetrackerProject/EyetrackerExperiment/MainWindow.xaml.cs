@@ -174,6 +174,12 @@ namespace EyetrackerExperiment
                     FilterPRG.IsChecked = false;
                     FilterTRM.IsChecked = false;
                     FilterNEWPRG.IsChecked = false;
+
+                    // Fachlich auszuschließen 
+                    FilterTY.IsChecked = false;
+                    FilterS1.IsChecked = false;
+                    FilterS2.IsChecked = false;
+                    FilterS3.IsChecked = false;
                 }
                 else if (changed == FilterPRG && changed.IsChecked)
                 {
@@ -211,20 +217,26 @@ namespace EyetrackerExperiment
                     FilterS1.IsChecked = false;
                     FilterS2.IsChecked = false;
                 }
+                else if (changed == FilterTY && changed.IsChecked)
+                {
+                    FilterTN.IsChecked = false;
+
+                    // Fachlich auszuschließen 
+                    FilterNEW.IsChecked = false;
+                }
+                else if (changed == FilterTN && changed.IsChecked)
+                {
+                    FilterTY.IsChecked = false;
+                }
             }
             else
-            {
-                FilterNEW.IsChecked = false;
-                FilterPRG.IsChecked = false;
-                FilterTRM.IsChecked = false;
-                FilterNEWPRG.IsChecked = false;
-                FilterS1.IsChecked = false;
-                FilterS2.IsChecked = false;
-                FilterS3.IsChecked = false;
-            }
+                foreach (Object m in rbsFilter.Items)
+                    if (m.GetType().Equals(typeof(RibbonSplitMenuItem)))
+                        ((RibbonMenuItem)m).IsChecked = false;
 
             if (FilterNEW.IsChecked || FilterPRG.IsChecked || FilterTRM.IsChecked || FilterNEWPRG.IsChecked ||
-                FilterS1.IsChecked || FilterS2.IsChecked || FilterS3.IsChecked)
+                FilterS1.IsChecked || FilterS2.IsChecked || FilterS3.IsChecked || 
+                FilterTY.IsChecked || FilterTN.IsChecked)
                 rbsFilter.LargeImageSource = new BitmapImage(new Uri("Resources/FilterOff32.png", UriKind.Relative));
             else
                 rbsFilter.LargeImageSource = new BitmapImage(new Uri("Resources/Filter32.png", UriKind.Relative));
@@ -242,7 +254,9 @@ namespace EyetrackerExperiment
                 (!FilterNEWPRG.IsChecked || t.status_cd != "TRM") &&
                 (!FilterS1.IsChecked || t.LastStep == 1) &&
                 (!FilterS2.IsChecked || t.LastStep == 2) &&
-                (!FilterS3.IsChecked || t.LastStep == 3));
+                (!FilterS3.IsChecked || t.LastStep == 3) &&
+                (!FilterTY.IsChecked || t.HasTracking) &&
+                (!FilterTN.IsChecked || !t.HasTracking));
         }
 
 
@@ -316,5 +330,6 @@ namespace EyetrackerExperiment
         {
 
         }
+
     }
 }

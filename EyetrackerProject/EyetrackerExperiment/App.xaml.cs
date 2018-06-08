@@ -11,7 +11,15 @@ namespace EyetrackerExperiment
     /// <summary>
     /// Interaktionslogik für "App.xaml"
     /// </summary>
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
+        private void LaunchSplash(object sender, EventArgs e)
+        {
+            Splash splash = new Splash();
+            splash.Show();
+            MainWindow = new MainWindow();
+            MainWindow.Show();
+            MainWindow.Focus();
+        }
     }
 }

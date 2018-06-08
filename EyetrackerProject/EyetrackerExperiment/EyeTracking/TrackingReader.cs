@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace EyetrackerExperiment.EyeTracking
 {
+
     class TrackingReader
     {
         private Test test;
@@ -33,24 +35,12 @@ namespace EyetrackerExperiment.EyeTracking
 
         public int Read(String filePath, bool mergeReplace)
         {
-            if (filePath.ToUpper().EndsWith(".IDF"))
-                return (int)ReturnCodes.UnsupportedFileFormat;
-            else if (filePath.ToUpper().EndsWith(".TXT"))
-                return ReadText(filePath, mergeReplace);
-            else
-                return (int)ReturnCodes.WrongFileExtension;
-        }
-
-        public int ReadText(String filePath, bool mergeReplace, bool forceExtension = false)
-        {
-            int numWritten = 0;
-
             if (!File.Exists(filePath))
                 return (int)ReturnCodes.FileNotFound;
 
             String fileExtension = Path.GetExtension(filePath);
 
-            if (!fileExtension.ToUpper().Equals(".TXT") && !forceExtension)
+            if (!fileExtension.ToUpper().Equals(".TXT") && !fileExtension.ToUpper().Equals(".IDF"))
                 return (int)ReturnCodes.WrongFileExtension;
 
             String fileName = Path.GetFileNameWithoutExtension(filePath);
@@ -82,7 +72,77 @@ namespace EyetrackerExperiment.EyeTracking
                 else return (int)ReturnCodes.DataPresent;
             }
 
-            StreamReader sr = new StreamReader(filePath, true);
+            FileStream stream = new FileStream(filePath, FileMode.Open);
+
+            if (filePath.ToUpper().EndsWith(".IDF"))
+                return ReadIdf(stream, slideAnswer);
+            else if (filePath.ToUpper().EndsWith(".TXT"))
+                return ReadTxt(stream, slideAnswer);
+            else
+                return (int)ReturnCodes.WrongFileExtension;
+        }
+
+
+        public int ReadIdf(FileStream stream, Slide_Answer slideAnswer)
+        {
+            int numWritten = 0;
+            IdfFile idfFile = new IdfFile(stream);
+            IdfHeader header = idfFile.readHeader();
+            IdfData data = new IdfData();
+
+            long time;
+            long timeOffset = -1;
+
+            for (int rec = 0; rec < idfFile.Count(); rec++)
+            {
+                int result = idfFile.readData(rec, ref data);
+
+                if (data.marker != 0x53)
+                    Console.WriteLine("Record {0}; Non SMP marker {1} encountered ", rec, data.marker);
+                if (data.rPupX < 0.0 || data.rPupX > 300.0)
+                    Console.WriteLine("Record {0}: rPupX value {1} outside expected range", rec, data.rPupX);
+                if (data.rPupY < 0.0 || data.rPupX > 300.0)
+                    Console.WriteLine("Record {0}: rPupX value {1} outside expected range", rec, data.rPupX);
+                if (data.rPupDX < 0.0 || data.rPupDX > 8.0)
+                    Console.WriteLine("Record {0}: rPupDX value {1} outside expected range", rec, data.rPupX);
+                if (data.rPupDX < 0.0 || data.rPupDX > 8.0)
+                    Console.WriteLine("Record {0}: rPupDX value {1} outside expected range", rec, data.rPupX);
+
+
+                if (timeOffset < 0)
+                    timeOffset = data.time;
+
+                time = data.time - timeOffset;
+
+                Tracking tracking = new Tracking();
+                tracking.occurred = slideAnswer.slide_start_time.Value.AddSeconds(time / 1000000.0);
+                tracking.x = (decimal)data.rPupX;
+                tracking.y = (decimal)data.rPupY;
+                tracking.dia_x = (decimal)data.rPupDX;
+                tracking.dia_y = (decimal)data.rPupDY;
+                tracking.cr_x = (decimal)data.rCr0X;
+                tracking.cr_y = (decimal)data.rCr0Y;
+                tracking.por_x = (decimal)data.rGX;
+                tracking.por_y = (decimal)data.rGY;
+                tracking.timing = 0;
+                tracking.trigger = 0;
+                tracking.Slide = slideAnswer.Slide;
+                tracking.Test = test;
+                test.Tracking.Add(tracking);
+
+                numWritten++;
+            }
+            db.Tracking.AddRange(test.Tracking);
+            db.SaveChanges();
+            test.Tracking.Clear();
+            return numWritten;
+        }
+
+        public int ReadTxt(FileStream stream, Slide_Answer slideAnswer)
+        {
+            int numWritten = 0;
+
+            StreamReader sr = new StreamReader(stream);
             String line;
             long timeOffset = -1;
             while (!sr.EndOfStream && (line = sr.ReadLine()).StartsWith("##")) ;

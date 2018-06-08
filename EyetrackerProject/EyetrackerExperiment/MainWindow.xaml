@@ -46,6 +46,10 @@
                         <RibbonSplitMenuItem Header="Step 1" IsCheckable="True" x:Name="FilterS1"/>
                         <RibbonSplitMenuItem Header="Step 2" IsCheckable="True" x:Name="FilterS2"/>
                         <RibbonSplitMenuItem Header="Step 3" IsCheckable="True" x:Name="FilterS3"/>
+                        <RibbonSeparator/>
+                        <RibbonSplitMenuItem Header="Tracking Data" IsCheckable="false" FontWeight="Bold" Focusable="False" IsTabStop="False" IsHitTestVisible="False"/>
+                        <RibbonSplitMenuItem Header="With tracking data" IsCheckable="True" x:Name="FilterTY"/>
+                        <RibbonSplitMenuItem Header="Without tracking data" IsCheckable="True" x:Name="FilterTN"/>
                     </RibbonSplitButton>
                     <RibbonButton Label="Reload Data" LargeImageSource="Resources/Reload32.png"  Click="bnReload_Click" ToolTip="Reload data from database to see al changes"/>
                 </RibbonGroup>
@@ -70,7 +74,7 @@
 
         </Ribbon>
         <StatusBar DockPanel.Dock="Bottom" Height="25"/>
-        <DataGrid x:Name="gridTests" ItemsSource="{Binding Tests}" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" AlternatingRowBackground="#FFF0FFC5" CanUserAddRows="False" CanUserResizeRows="False" FrozenColumnCount="2" AreRowDetailsFrozen="True" RowDetailsVisibilityMode="Collapsed" MouseDoubleClick="gridTests_MouseDoubleClick">
+        <DataGrid x:Name="gridTests" ItemsSource="{Binding Tests}" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" AlternatingRowBackground="#FFF7FFC5" CanUserAddRows="False" CanUserResizeRows="False" FrozenColumnCount="2" AreRowDetailsFrozen="True" RowDetailsVisibilityMode="Collapsed" MouseDoubleClick="gridTests_MouseDoubleClick">
             <DataGrid.Resources>
                 <Style x:Key="TestTitleStyle" TargetType="TextBlock">
                     <Setter Property="ToolTip" Value="{Binding Test_Definition.Description}"/>
@@ -79,15 +83,6 @@
                     <Setter Property="ToolTip" Value="{Binding Candidate.Description}"/>
                 </Style>
             </DataGrid.Resources>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Candidate" Binding="{Binding Candidate.personal_code}" ElementStyle="{StaticResource CandidateStyle}"/>
-                <DataGridTextColumn Header="Test Type" Binding="{Binding Test_Definition.Title}" ElementStyle="{StaticResource TestTitleStyle}" Width="*"/>
-                <DataGridTextColumn Header="Status" Binding="{Binding status_cd, Converter={StaticResource TestStatusConverter}}"/>
-                <DataGridTextColumn Header="Start" Binding="{Binding start_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}"/>
-                <DataGridTextColumn Header="End" Binding="{Binding end_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}" />
-                <DataGridTextColumn Header="Steps" Binding="{Binding NumSteps}" />
-                <DataGridTextColumn Header="Completed" Binding="{Binding LastStep}" />
-            </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
                     <ItemsControl ItemsSource="{Binding Steps}" >
@@ -99,6 +94,22 @@
                     </ItemsControl>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Candidate" Binding="{Binding Candidate.personal_code}" ElementStyle="{StaticResource CandidateStyle}"/>
+                <DataGridTextColumn Header="Test Type" Binding="{Binding Test_Definition.Title}" ElementStyle="{StaticResource TestTitleStyle}" Width="*"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding status_cd, Converter={StaticResource TestStatusConverter}}"/>
+                <DataGridTextColumn Header="Start" Binding="{Binding start_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}"/>
+                <DataGridTextColumn Header="End" Binding="{Binding end_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}" />
+                <DataGridTextColumn Header="Steps" Binding="{Binding NumSteps}" />
+                <DataGridTextColumn Header="Completed" Binding="{Binding LastStep}" />
+                <DataGridTemplateColumn Header="Tracking">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding HasTracking, Mode=OneWay}" HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
         </DataGrid>
     </DockPanel>
 </RibbonWindow>

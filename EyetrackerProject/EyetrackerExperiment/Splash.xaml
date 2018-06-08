@@ -1,0 +1,43 @@
+﻿<Window x:Class="EyetrackerExperiment.Splash"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EyetrackerExperiment"
+        mc:Ignorable="d"
+        Title="Splash" Height="380" Width="610" WindowStyle="None"
+        ResizeMode="NoResize" AllowsTransparency="True">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="Resources/bpm.jpg"/>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto" MinHeight="85"/>
+        </Grid.RowDefinitions>
+        <Canvas Grid.Row="1" Grid.ColumnSpan="2">
+            <Canvas.Background>
+                <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                    <GradientStop Color="White" Offset="0"/>
+                    <GradientStop Color="White" Offset="0.4"/>
+                    <GradientStop Offset="1"/>
+                </LinearGradientBrush>
+            </Canvas.Background>
+            <Image Grid.Row="1" Source="Resources/ventum_logo.png" Margin="15 10">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="0.75" ScaleY="0.75"/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+        </Canvas>
+        <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="15 10">
+            <TextBlock Grid.ColumnSpan="2" FontWeight="Bold" FontSize="40" Text="Eyetracker" Foreground="White" HorizontalAlignment="Right"/>
+            <TextBlock Grid.ColumnSpan="2" FontWeight="Bold" FontSize="40" Text="Experiment" Foreground="White" HorizontalAlignment="Right"/>
+        </StackPanel>
+    </Grid>
+</Window>

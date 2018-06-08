@@ -158,6 +158,8 @@ namespace Data
             }
         }
 
+        public bool HasTracking { get { return Tracking.FirstOrDefault() != null; } }
+
         public bool ShowDetails { get; set; }
     }
 
