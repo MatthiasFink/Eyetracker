@@ -13,13 +13,13 @@ namespace EyetrackerExperiment.EyeTracking
 
     class TrackingReader
     {
-        private Test test;
+        public Test Test;
         private EyetrackerEntities db;
 
-        public TrackingReader(EyetrackerEntities Db, Test Test)
+        public TrackingReader(EyetrackerEntities Db, Test Test = null)
         {
             db = Db;
-            test = Test;
+            this.Test = Test;
         }
 
         public enum ReturnCodes
@@ -49,25 +49,28 @@ namespace EyetrackerExperiment.EyeTracking
             if (nameParts.Count() != 3)
                 return (int)ReturnCodes.MalformedFileName;
 
-            if (!nameParts[0].Equals(test.Candidate.personal_code))
+            if (!nameParts[0].Equals(Test.Candidate.personal_code))
                 return (int)ReturnCodes.WrongCandidate;
 
             int testId = int.Parse(nameParts[1]);
 
-            if (test.id != testId)
+            if (Test == null)
+                Test = db.Tests.FirstOrDefault(t => t.id == testId);
+
+            if (Test.id != testId)
                 return (int)ReturnCodes.WrongTest;
 
             int slideNum = int.Parse(nameParts[2]);
-            Slide_Answer slideAnswer = test.Slide_Answer.FirstOrDefault(sa => sa.Slide.num == slideNum);
+            Slide_Answer slideAnswer = Test.Slide_Answer.FirstOrDefault(sa => sa.Slide.num == slideNum);
 
             if (slideAnswer == null)
                 return (int)ReturnCodes.MalformedFileName;
 
-            if (test.Tracking.Count(t => t.Slide == slideAnswer.Slide) > 0)
+            if (Test.Tracking.Count(t => t.Slide == slideAnswer.Slide) > 0)
             {
                 if (mergeReplace)
                 {
-                    db.Tracking.RemoveRange(test.Tracking.Where(t => t.Slide == slideAnswer.Slide));
+                    db.Tracking.RemoveRange(Test.Tracking.Where(t => t.Slide == slideAnswer.Slide));
                 }
                 else return (int)ReturnCodes.DataPresent;
             }
@@ -127,14 +130,14 @@ namespace EyetrackerExperiment.EyeTracking
                 tracking.timing = 0;
                 tracking.trigger = 0;
                 tracking.Slide = slideAnswer.Slide;
-                tracking.Test = test;
-                test.Tracking.Add(tracking);
+                tracking.Test = Test;
+                Test.Tracking.Add(tracking);
 
                 numWritten++;
             }
-            db.Tracking.AddRange(test.Tracking);
+            db.Tracking.AddRange(Test.Tracking);
             db.SaveChanges();
-            test.Tracking.Clear();
+            Test.Tracking.Clear();
             return numWritten;
         }
 
@@ -182,13 +185,13 @@ namespace EyetrackerExperiment.EyeTracking
                 tracking.timing = int.Parse(lineParts[11]);
                 tracking.trigger = int.Parse(lineParts[12]);
                 tracking.Slide = slideAnswer.Slide;
-                tracking.Test = test;
-                test.Tracking.Add(tracking);
+                tracking.Test = Test;
+                Test.Tracking.Add(tracking);
                 numWritten++;
             }
-            db.Tracking.AddRange(test.Tracking);
+            db.Tracking.AddRange(Test.Tracking);
             db.SaveChanges();
-            test.Tracking.Clear();
+            Test.Tracking.Clear();
             return numWritten;
         }
     }

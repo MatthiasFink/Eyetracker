@@ -35,9 +35,9 @@
                 </Image.RenderTransform>
             </Image>
         </Canvas>
-        <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="15 10">
-            <TextBlock Grid.ColumnSpan="2" FontWeight="Bold" FontSize="40" Text="Eyetracker" Foreground="White" HorizontalAlignment="Right"/>
-            <TextBlock Grid.ColumnSpan="2" FontWeight="Bold" FontSize="40" Text="Experiment" Foreground="White" HorizontalAlignment="Right"/>
+        <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="15 10" VerticalAlignment="Center">
+            <TextBlock Grid.ColumnSpan="2" FontWeight="Bold" FontSize="45" Text="Eyetracker" FontFamily="Arial" Foreground="White" HorizontalAlignment="Right"/>
+            <TextBlock Grid.ColumnSpan="2" FontWeight="Bold" FontSize="45" Text="Experiment" FontFamily="Arial" Foreground="White" HorizontalAlignment="Right"/>
         </StackPanel>
     </Grid>
 </Window>

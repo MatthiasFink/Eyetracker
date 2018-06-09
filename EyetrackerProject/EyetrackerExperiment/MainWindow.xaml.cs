@@ -1,21 +1,13 @@
 ﻿using Data;
 using EyetrackerExperiment.EyeTracking;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Ribbon;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EyetrackerExperiment
 {
@@ -295,7 +287,7 @@ namespace EyetrackerExperiment
             bool mergeReplace = false;
             if (test.HasTracking)
             {
-                if (MessageBox.Show("Test also contains tracking data. Do you want to merge/replace existing data?",
+                if (MessageBox.Show("Test already contains tracking data. Do you want to merge/replace existing data?",
                     "Confirmation",
                     MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
@@ -310,8 +302,8 @@ namespace EyetrackerExperiment
                 test.Candidate.personal_code,
                 test.id,
                 "*");
-            String initialDirectory = System.IO.Path.GetDirectoryName(fullPattern);
-            String filter = System.IO.Path.GetFileName(fullPattern);
+            String initialDirectory = Path.GetDirectoryName(fullPattern);
+            String filter = Path.GetFileName(fullPattern);
             filter = "idf tracking for " + test.Candidate.personal_code + "|" + filter + "|" +
                     "txt tracking for " + test.Candidate.personal_code + "|" + filter.Replace(".idf", ".txt");
             String[] fileNames = Configuration.FileDialogs.SelectFiles(initialDirectory, filter);
@@ -326,9 +318,64 @@ namespace EyetrackerExperiment
 
         }
 
+
+        private int ScanForMissingTracking(String path)
+        {
+            int loaded = 0;
+
+            TrackingReader trackingReader = new TrackingReader(db);
+
+            foreach (String filePath in Directory.GetFiles(path))
+            {
+                String fileName = Path.GetFileNameWithoutExtension(filePath);
+                String extension = Path.GetExtension(filePath);
+
+                if (!extension.ToUpper().Equals(".TXT") && !extension.ToUpper().Equals(".IDF"))
+                    continue;
+
+                String[] nameParts = fileName.Split('-');
+
+                if (nameParts.Count() != 3)
+                    continue;
+
+                if (nameParts[0].Length != 10)
+                    continue;
+
+                int slideNum = -1;
+                int testId = -1;
+
+                if (!int.TryParse(nameParts[1], out testId) || !int.TryParse(nameParts[2], out slideNum))
+                    continue;
+
+                Test test = db.Tests.FirstOrDefault(t => t.id == testId);
+                if (test == null)
+                    continue;
+
+                Slide_Answer slideAnswer = test.Slide_Answer.FirstOrDefault(sa => sa.Slide.num == slideNum);
+                if (slideAnswer == null)
+                    continue;
+
+                trackingReader.Test = test;
+                if (trackingReader.Read(filePath, false) > 0)
+                    loaded++;
+            }
+
+            foreach (String subDir in Directory.GetDirectories(path)) 
+                loaded += ScanForMissingTracking(subDir);
+
+            return loaded;
+        }
+
         private void bnImportTrackingMissing_Click(object sender, RoutedEventArgs e)
         {
+            Properties.Settings settings = new Properties.Settings();
+            String path = settings.TrackingPathRemote;
+            path = Configuration.FileDialogs.SelectFolder(path);
 
+            if (path == null)
+                return;
+
+            ScanForMissingTracking(path);
         }
 
     }
