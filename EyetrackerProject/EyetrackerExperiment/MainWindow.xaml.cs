@@ -331,5 +331,9 @@ namespace EyetrackerExperiment
 
         }
 
+        private void Ribbon_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

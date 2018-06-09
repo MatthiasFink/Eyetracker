@@ -15,7 +15,7 @@
         <Data:TestStatusConverter x:Key="TestStatusConverter"/>
     </RibbonWindow.Resources>
     <DockPanel LastChildFill="True">
-        <Ribbon DockPanel.Dock="Top">
+        <Ribbon DockPanel.Dock="Top" SelectionChanged="Ribbon_SelectionChanged">
             <Ribbon.QuickAccessToolBar>
                 <RibbonQuickAccessToolBar>
                     <RibbonButton Name="bnReload" SmallImageSource="Resources/Reload32.png"  Click="bnReload_Click" ToolTip="Change database connection"/>
@@ -27,12 +27,12 @@
             </Ribbon.ApplicationMenu>
             <RibbonTab Header="Start">
                 <RibbonGroup Header="Manage Tests">
-                    <RibbonButton Label="Add New" LargeImageSource="Resources/Settings32.png" Click="AddNewTest"/>
-                    <RibbonButton Label="Delete" LargeImageSource="Resources/Settings32.png" Click="DeleteTest"/>
+                    <RibbonButton Label="Add New" LargeImageSource="Resources/AddNew32.png" Click="AddNewTest"/>
+                    <RibbonButton Label="Delete" LargeImageSource="Resources/Delete32.png" Click="DeleteTest"/>
                 </RibbonGroup>
                 <RibbonGroup Header="Steps">
-                    <RibbonButton Label="Execute Next" x:Name="rbnExecuteNext" LargeImageSource="Resources/Settings32.png" Click="RunNextStep"/>
-                    <RibbonButton Label="Delete Last" x:Name="rbnDeleteLast" LargeImageSource="Resources/Settings32.png" Click="DeleteLastStep"/>
+                    <RibbonButton Label="Execute Next" x:Name="rbnExecuteNext" LargeImageSource="Resources/ExecuteNext32.png" Click="RunNextStep"/>
+                    <RibbonButton Label="Delete Last" x:Name="rbnDeleteLast" LargeImageSource="Resources/DeleteLast32.png" Click="DeleteLastStep"/>
                 </RibbonGroup>
                 <RibbonGroup Header="View">
                     <RibbonSplitButton x:Name="rbsFilter" LargeImageSource="Resources/Filter32.png" Label="Filter" Click="FilterCheck">
@@ -56,19 +56,19 @@
             </RibbonTab>
             <RibbonTab Header="Tracking Data">
                 <RibbonGroup Header="Import Tracking Data">
-                    <RibbonButton Label="Current Test" LargeImageSource="Resources/Database32.png" Click="bnImportTrackingCurrent_Click"/>
-                    <RibbonButton Label="Scan for missing" LargeImageSource="Resources/Database32.png" Click="bnImportTrackingMissing_Click"/>
+                    <RibbonButton Label="Current Test" LargeImageSource="Resources/CurrentTest32.png" Click="bnImportTrackingCurrent_Click"/>
+                    <RibbonButton Label="Scan for missing" LargeImageSource="Resources/ScanForMissing32.png" Click="bnImportTrackingMissing_Click"/>
                 </RibbonGroup>
                 
             </RibbonTab>
             <RibbonTab Header="Settings">
                 <RibbonGroup Header="Database">
-                    <RibbonButton Label="DB Connection" LargeImageSource="Resources/Database32.png" Click="bnDbSettings_Click"/>
+                    <RibbonButton Label="DB Connection" LargeImageSource="Resources/DBConnection32.png" Click="bnDbSettings_Click"/>
                 </RibbonGroup>
                 <RibbonGroup Header="General">
-                    <RibbonButton Label="Path Settings" Click="bnPathSettings_Click"/>
-                    <RibbonButton Label="Eyetracker Settings" Click="bnEyetrackerSettings_Click"/>
-                    <RibbonButton Label="Import slide image files" Click="bnImportImages_Click"/>
+                    <RibbonButton Label="Path Settings" LargeImageSource="Resources/PathSettings32.png" Click="bnPathSettings_Click"/>
+                    <RibbonButton Label="Eyetracker Settings" LargeImageSource ="Resources/Eyetracker32.png" Click="bnEyetrackerSettings_Click"/>
+                    <RibbonButton Label="Import slide image files" LargeImageSource="Resources/ImportSlides32.png" Click="bnImportImages_Click"/>
                 </RibbonGroup>
             </RibbonTab>
 
