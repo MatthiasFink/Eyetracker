@@ -378,5 +378,9 @@ namespace EyetrackerExperiment
             ScanForMissingTracking(path);
         }
 
+        private void Ribbon_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
