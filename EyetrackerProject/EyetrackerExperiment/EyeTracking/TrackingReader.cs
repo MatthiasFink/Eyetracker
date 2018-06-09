@@ -33,6 +33,26 @@ namespace EyetrackerExperiment.EyeTracking
             DataPresent = -7
         }
 
+        private static String[] returnCodeMsgs =
+        {
+            "Could not open file",
+            "File has wrong extension",
+            "Malformed Filename, must be 10-letter personal code, test id and slide number, separated by dashes",
+            "File does not correspond to selected test candidate",
+            "File does not correspond to selected test",
+            "File format not supported",
+            "Test already contains tracking data for the corresponding slide"
+        };
+
+        public static String ReturnCodeMsg(int returnCode)
+        {
+            returnCode = 1 - returnCode;
+            if (returnCode > 0 && returnCode < returnCodeMsgs.Count())
+                return returnCodeMsgs[returnCode];
+            else
+                return "Unknown error";
+        } 
+
         public int Read(String filePath, bool mergeReplace)
         {
             if (!File.Exists(filePath))

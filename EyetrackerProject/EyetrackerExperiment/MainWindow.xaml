@@ -15,7 +15,7 @@
         <Data:TestStatusConverter x:Key="TestStatusConverter"/>
     </RibbonWindow.Resources>
     <DockPanel LastChildFill="True">
-        <Ribbon DockPanel.Dock="Top" SelectionChanged="Ribbon_SelectionChanged">
+        <Ribbon DockPanel.Dock="Top">
             <Ribbon.QuickAccessToolBar>
                 <RibbonQuickAccessToolBar>
                     <RibbonButton Name="bnReload" SmallImageSource="Resources/Reload32.png"  Click="bnReload_Click" ToolTip="Change database connection"/>
@@ -73,7 +73,7 @@
             </RibbonTab>
 
         </Ribbon>
-        <StatusBar DockPanel.Dock="Bottom" Height="25"/>
+        <local:LoggingStatus x:Name="LoggingStatus" DockPanel.Dock="Bottom"/>
         <DataGrid x:Name="gridTests" ItemsSource="{Binding Tests}" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" AlternatingRowBackground="#FFF7FFC5" CanUserAddRows="False" CanUserResizeRows="False" FrozenColumnCount="2" AreRowDetailsFrozen="True" RowDetailsVisibilityMode="Collapsed" MouseDoubleClick="gridTests_MouseDoubleClick">
             <DataGrid.Resources>
                 <Style x:Key="TestTitleStyle" TargetType="TextBlock">

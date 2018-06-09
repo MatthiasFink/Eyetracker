@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="EyetrackerExperiment.LoggingStatus"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EyetrackerExperiment"
+             mc:Ignorable="d" 
+             d:DesignHeight="24" d:DesignWidth="400">
+    <ComboBox x:Name="cbStatusList" HorizontalAlignment="Stretch" IsReadOnly="True" 
+              SelectedIndex="0" ItemsSource="{Binding}" >
+        <ComboBox.DataContext>
+            <local:StatusMessages/>
+        </ComboBox.DataContext>
+        <ComboBox.Resources>
+            <local:IconVisibilityConverter x:Key="iconVisibility"/>
+        </ComboBox.Resources>
+        <ComboBox.ItemTemplate>
+            <DataTemplate DataType="{x:Type local:StatusMessage}">
+                <Grid ToolTip="{Binding Detail}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Canvas Width="16" Height="16" Visibility="{Binding Severity, Mode=OneWay, Converter={StaticResource iconVisibility}, ConverterParameter=0}">
+                        <Ellipse Canvas.Left="1.6" Canvas.Top="1.6" Width="12.8" Height="12.8" Fill="#F0BCBE00" StrokeThickness="1.83900285" Stroke="#FF898A29" StrokeMiterLimit="4" StrokeLineJoin="Miter" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat"/>
+                        <Path Fill="#FFFFFFFF" StrokeThickness="1" StrokeLineJoin="Miter" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat">
+                            <Path.Data>
+                                <PathGeometry Figures="m 9.8510445 3.8654019 c 0.026092 0.6459 -0.5917794 1.1486 -1.2091255 1.1405 -0.5807524 0.058 -1.2362898 -0.3472 -1.2534997 -0.9712 -0.062596 -0.6181 0.4841162 -1.1472 1.0801981 -1.1853 0.6387117 -0.1043 1.3886948 0.3095 1.3824271 1.016 z M 9.1528023 12.895502 c -0.7398656 0.1694 -1.5634517 0.3348 -2.2860717 0.01 -0.5991014 -0.2567 -0.8282809 -0.956 -0.7720946 -1.5635 0.071434 -1.0101 0.3490267 -1.9898001 0.5447669 -2.9800001 0.1656839 -0.7599 0.3157634 -1.5231 0.4858112 -2.282 l 2.1484375 0 c -0.3222387 1.5348 -0.6556866 3.0675 -0.9700491 4.6037001 -0.095058 0.316 0.012096 0.7434 0.4056644 0.7476 0.2477485 0.067 0.6369342 -0.1194 0.7683444 -0.078 -0.1109171 0.5135 -0.2127261 1.0289 -0.324809 1.542 z" FillRule="NonZero"/>
+                            </Path.Data>
+                        </Path>
+                    </Canvas>
+                    <Canvas Width="16" Height="16" Visibility="{Binding Severity, Mode=OneWay, Converter={StaticResource iconVisibility}, ConverterParameter=1}">
+                        <Path Fill="#F0F7E800" StrokeThickness="1.83899999" Stroke="#FFFFCE29" StrokeMiterLimit="4" StrokeLineJoin="Round" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat">
+                            <Path.Data>
+                                <PathGeometry Figures="m 14.400265 13.877825 -12.8005302 0 6.4002651 -12.2780902 z" FillRule="NonZero"/>
+                            </Path.Data>
+                        </Path>
+                        <Path Fill="#FF000000" StrokeThickness="1" StrokeLineJoin="Miter" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat">
+                            <Path.Data>
+                                <PathGeometry Figures="m 9.0334523 12.285875 c 0.00911 0.621174 -0.5263654 1.050628 -1.076633 1.050628 -0.5502677 0 -1.0987301 -0.44002 -1.0987301 -1.050628 0 -0.610608 0.53583 -1.046238 1.0987301 -1.050629 0.5629001 -0.0044 1.0675274 0.429455 1.076633 1.050629 z m -1.919474 -2.5181593 0 -3.8217878 c 0 -0.9945626 1.7904451 -0.996721 1.7904451 0 0 0.996721 0 3.8115878 0 3.8115878 0.017003 1.0572843 -1.8279225 1.1352253 -1.7904451 0.0102 z" FillRule="NonZero"/>
+                            </Path.Data>
+                        </Path>
+                    </Canvas>
+                    <Canvas Width="16" Height="16" Visibility="{Binding Severity, Mode=OneWay, Converter={StaticResource iconVisibility}, ConverterParameter=2}">
+                        <Path Fill="#F0FFFFFF" StrokeThickness="1.83899999" Stroke="#FFFF293C" StrokeMiterLimit="4" StrokeLineJoin="Round" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat">
+                            <Path.Data>
+                                <PathGeometry Figures="m 14.400265 13.877825 -12.8005302 0 6.4002651 -12.2780902 z" FillRule="NonZero"/>
+                            </Path.Data>
+                        </Path>
+                        <Path Fill="#FF000000" StrokeThickness="1" StrokeLineJoin="Miter" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat">
+                            <Path.Data>
+                                <PathGeometry Figures="m 9.0334523 12.285875 c 0.00911 0.621174 -0.5263654 1.050628 -1.076633 1.050628 -0.5502677 0 -1.0987301 -0.44002 -1.0987301 -1.050628 0 -0.610608 0.53583 -1.046238 1.0987301 -1.050629 0.5629001 -0.0044 1.0675274 0.429455 1.076633 1.050629 z m -1.919474 -2.5181593 0 -3.8217878 c 0 -0.9945626 1.7904451 -0.996721 1.7904451 0 0 0.996721 0 3.8115878 0 3.8115878 0.017003 1.0572843 -1.8279225 1.1352253 -1.7904451 0.0102 z" FillRule="NonZero"/>
+                            </Path.Data>
+                        </Path>
+                    </Canvas>
+                    <Canvas Width="16" Height="16" Visibility="{Binding Severity, Mode=OneWay, Converter={StaticResource iconVisibility}, ConverterParameter=3}">
+                        <Path Fill="#FF000000" StrokeThickness="1" StrokeLineJoin="Miter" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat">
+                            <Path.Data>
+                                <PathGeometry Figures="M 13.677964 1.3259041 12.332261 1.6325447 12.281479 2.948951 11.797105 3.3727791 11.537339 3.480201 C 10.512716 2.7554718 9.2833515 2.2918201 7.9240581 2.308326 4.1128777 2.354605 1.2892925 5.4653767 1.2892925 8.7497322 c 0 3.2843558 2.9467116 6.1335438 6.6347656 6.1777348 3.6880529 0.04419 6.6328119 -3.38451 6.6328119 -6.1777348 0 -1.5031321 -0.82087 -3.2624974 -2.169922 -4.5644531 L 13.263901 3.417701 13.301011 2.4372322 13.898667 2.3005135 Z M 6.6776588 3.6445312 C 6.7059068 4.0555896 6.5796188 4.2237995 5.9143303 4.5842143 5.2494239 4.9442402 4.9695454 5.2436276 4.3805917 5.1675088 3.7916379 5.09139 4.4665308 4.1617268 5.134498 3.8000158 5.756603 3.420075 6.6494109 3.2334727 6.6776588 3.6445312 Z" FillRule="NonZero"/>
+                            </Path.Data>
+                        </Path>
+                    </Canvas>
+                    <TextBlock Grid.Column="1" Text="{Binding Message}" HorizontalAlignment="Stretch"/>
+                </Grid>
+            </DataTemplate>
+        </ComboBox.ItemTemplate>
+        <!--
+        <local:StatusMessage Severity="Error" Message="Message very long and extended_and even longer"/>
+        -->
+    </ComboBox>
+</UserControl>

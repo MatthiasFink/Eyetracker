@@ -137,11 +137,10 @@ namespace EyetrackerExperiment.EyeTracking
             eyeTracker.ClearTracking();
             eyeTracker.Stop();
 
-            this.Dispatcher.Invoke((Action)delegate
-            {
-                Mouse.OverrideCursor = null;
-                this.Close();
-            });
+            ((App)App.Current).Log(Severity.Warning, String.Format("Eyetracker test for {0} aborted.", Test.Candidate.personal_code));
+
+            Mouse.OverrideCursor = null;
+            this.Close();
         }
 
         private void FinishExperiment()
@@ -161,6 +160,8 @@ namespace EyetrackerExperiment.EyeTracking
                 Test.end_time = DateTime.Now;
             }
             Db.SaveChanges();
+
+            ((App)App.Current).Log(Severity.Info, String.Format("Eyetracker test for {0} successfully completed.", Test.Candidate.personal_code));
 
             Mouse.OverrideCursor = null;
             Close();

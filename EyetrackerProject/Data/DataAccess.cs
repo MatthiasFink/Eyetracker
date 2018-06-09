@@ -26,7 +26,7 @@ namespace Data
         {
             if (rangeLow == 0)
                 return "under " + rangeHigh;
-            else if (rangeHigh == 99)
+            else if (rangeHigh >= 99)
                 return "above " + rangeLow;
             else
                 return "between " + rangeLow + " and " + rangeHigh;

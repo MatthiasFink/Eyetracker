@@ -116,6 +116,9 @@
       <DependentUpon>TutorialWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="EyeTracking\Idf.cs" />
+    <Compile Include="LoggingStatus.xaml.cs">
+      <DependentUpon>LoggingStatus.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Questionnaire\QuestionnaireWindow.xaml.cs">
       <DependentUpon>QuestionnaireWindow.xaml</DependentUpon>
     </Compile>
@@ -141,6 +144,10 @@
     <Page Include="EyeTracking\TutorialWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="LoggingStatus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
