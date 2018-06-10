@@ -119,14 +119,15 @@ namespace Data
 
     public class Step
     {
-        public int Num;
+        public int Num { get; }
         public enum StepType { Questionnaire, EyeTracker}
         public StepType Type;
-        public String Title;
-        public bool IsCompleted;
-        public Step(int num, StepType stepType, String title, bool isCompleted)
+        public String Title { get; }
+        public bool IsCompleted { get; }
+        public Test Test;
+        public Step(int num, StepType stepType, String title, bool isCompleted, Test test)
         {
-            Num = num; Type = stepType; Title = title; IsCompleted = isCompleted;
+            Num = num; Type = stepType; Title = title; IsCompleted = isCompleted; Test = test;
         }
         public String Description
         {
@@ -149,10 +150,10 @@ namespace Data
                 List<Step> steps = new List<Step>();
                 foreach (Questionnaire q in Test_Definition.Questionnaire)
                 {
-                    steps.Add(new Step(q.Step, Step.StepType.Questionnaire, q.Title, q.Step <= this.LastStep));
+                    steps.Add(new Step(q.Step, Step.StepType.Questionnaire, q.Title, q.Step <= this.LastStep, this));
                 }
                 if (Test_Definition.Slide.Count > 0)
-                    steps.Add(new Step(Test_Definition.EyeTrackerStep, Step.StepType.EyeTracker, "Eyetracker Experiment", Slide_Answer.Count > 0));
+                    steps.Add(new Step(Test_Definition.EyeTrackerStep, Step.StepType.EyeTracker, "Eyetracker Experiment", Slide_Answer.Count > 0, this));
                 return steps.OrderBy(s => s.Num).ToList();
 
             }

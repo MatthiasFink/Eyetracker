@@ -12,7 +12,7 @@
       <Value Profile="(Default)">C:\TEMP</Value>
     </Setting>
     <Setting Name="TrackingPathLocal" Type="System.String" Scope="User">
-      <Value Profile="(Default)">D:\\data\\openDoor</Value>
+      <Value Profile="(Default)">D:\data\openDoor</Value>
     </Setting>
     <Setting Name="TrackingPathRemote" Type="System.String" Scope="User">
       <Value Profile="(Default)">\\ventum.de\Data\VentumData\Scans\MUC1</Value>

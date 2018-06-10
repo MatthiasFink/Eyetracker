@@ -63,8 +63,6 @@ namespace EyetrackerExperiment
             db.SaveChanges();
         }
 
-
-
         private void AddNewTest(object sender, RoutedEventArgs e)
         {
             NewTest newTest = new NewTest(db);
@@ -277,6 +275,25 @@ namespace EyetrackerExperiment
         {
             gridTests.RowDetailsVisibilityMode = gridTests.RowDetailsVisibilityMode == DataGridRowDetailsVisibilityMode.Collapsed ?
                 DataGridRowDetailsVisibilityMode.VisibleWhenSelected : DataGridRowDetailsVisibilityMode.Collapsed;
+        }
+
+        private void viewStepDetail_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox cb = (CheckBox)sender;
+            Step s = (Step)cb.DataContext;
+            if (s.IsCompleted)
+            {
+                Test t = s.Test;
+                if (s.Num == t.Test_Definition.EyeTrackerStep)
+                {
+                    new TrackingViewer(t);
+                }
+                else
+                {
+
+                }
+            }
+            cb.IsChecked = s.IsCompleted;
         }
 
         private void bnImportTrackingCurrent_Click(object sender, RoutedEventArgs e)

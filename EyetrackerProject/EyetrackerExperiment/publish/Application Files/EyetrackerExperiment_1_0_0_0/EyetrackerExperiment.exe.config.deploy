@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <configSections>
+    <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
+    <sectionGroup name="userSettings" type="System.Configuration.UserSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <section name="EyetrackerExperiment.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" allowExeDefinition="MachineToLocalUser" requirePermission="false" />
+      <section name="Data.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" allowExeDefinition="MachineToLocalUser" requirePermission="false" />
+    </sectionGroup>
+  </configSections>
+  <entityFramework>
+    <defaultConnectionFactory type="System.Data.Entity.Infrastructure.SqlConnectionFactory, EntityFramework" />
+    <providers>
+      <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer" />
+    </providers>
+  </entityFramework>
+  <connectionStrings>
+    <add name="EyetrackerEntities" connectionString="metadata=res://*/Model.csdl|res://*/Model.ssdl|res://*/Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=MEDIATOWER2\SQLEXPRESS;initial catalog=Eyetracker;integrated security=True;multipleactiveresultsets=True;application name=EntityFramework&quot;" providerName="System.Data.EntityClient" />
+  </connectionStrings>
+  <userSettings>
+    <EyetrackerExperiment.Properties.Settings>
+      <setting name="EyetrackerIP" serializeAs="String">
+        <value>192.168.1.1</value>
+      </setting>
+      <setting name="EyetrackerPort" serializeAs="String">
+        <value>4444</value>
+      </setting>
+      <setting name="AnswerPath" serializeAs="String">
+        <value>C:\TEMP</value>
+      </setting>
+      <setting name="TrackingPathLocal" serializeAs="String">
+        <value>D:\data\openDoor</value>
+      </setting>
+      <setting name="TrackingPathRemote" serializeAs="String">
+        <value>\\ventum.de\Data\VentumData\Scans\MUC1</value>
+      </setting>
+      <setting name="TrackingImportAuto" serializeAs="String">
+        <value>False</value>
+      </setting>
+    </EyetrackerExperiment.Properties.Settings>
+    <Data.Properties.Settings>
+      <setting name="DBSchema" serializeAs="String">
+        <value>dbo</value>
+      </setting>
+      <setting name="DBWindowsAuthentication" serializeAs="String">
+        <value>True</value>
+      </setting>
+      <setting name="DBUser" serializeAs="String">
+        <value />
+      </setting>
+      <setting name="DBPassword" serializeAs="String">
+        <value />
+      </setting>
+      <setting name="DBServer" serializeAs="String">
+        <value>localhost\SQLEXPRESS</value>
+      </setting>
+      <setting name="DBCatalog" serializeAs="String">
+        <value>Eyetracker</value>
+      </setting>
+    </Data.Properties.Settings>
+  </userSettings>
+
+</configuration>

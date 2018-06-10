@@ -59,7 +59,7 @@
                     <RibbonButton Label="Current Test" LargeImageSource="Resources/CurrentTest32.png" Click="bnImportTrackingCurrent_Click"/>
                     <RibbonButton Label="Scan for missing" LargeImageSource="Resources/ScanForMissing32.png" Click="bnImportTrackingMissing_Click"/>
                 </RibbonGroup>
-                
+
             </RibbonTab>
             <RibbonTab Header="Settings">
                 <RibbonGroup Header="Database">
@@ -82,30 +82,47 @@
                 <Style x:Key="CandidateStyle" TargetType="TextBlock">
                     <Setter Property="ToolTip" Value="{Binding Candidate.Description}"/>
                 </Style>
+                <Style x:Key="CenteredStyle" TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                </Style>
             </DataGrid.Resources>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
-                    <ItemsControl ItemsSource="{Binding Steps}" >
+                    <ItemsControl ItemsSource="{Binding Steps}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Description}" Margin="10 2 0 2" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="{Binding ActualWidth, ElementName=colCandidate, Mode=OneWay}"/>
+                                        <ColumnDefinition Width="{Binding ActualWidth, ElementName=colTitle, Mode=OneWay}"/>
+                                        <ColumnDefinition Width="{Binding ActualWidth, ElementName=colStatus, Mode=OneWay}"/>
+                                        <ColumnDefinition Width="{Binding ActualWidth, ElementName=colStart, Mode=OneWay}"/>
+                                        <ColumnDefinition Width="{Binding ActualWidth, ElementName=colEnd, Mode=OneWay}"/>
+                                        <ColumnDefinition Width="{Binding ActualWidth, ElementName=colNumSteps, Mode=OneWay}"/>
+                                        <ColumnDefinition Width="{Binding ActualWidth, ElementName=colLastStep, Mode=OneWay}"/>
+                                        <ColumnDefinition Width="{Binding ActualWidth, ElementName=colTracking, Mode=OneWay}"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Num, Mode=OneWay}" Margin="0 2 5 2" HorizontalAlignment="Right"/>
+                                    <TextBlock Text="{Binding Title, Mode=OneWay}" Margin="0 2 0 2" Grid.Column="1" Grid.ColumnSpan="5" />
+                                    <CheckBox Grid.Column="6" IsChecked="{Binding IsCompleted, Mode=OneWay}" Margin="0 2 0 2" HorizontalAlignment="Center" Click="viewStepDetail_Click"/>
+                                </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Candidate" Binding="{Binding Candidate.personal_code}" ElementStyle="{StaticResource CandidateStyle}"/>
-                <DataGridTextColumn Header="Test Type" Binding="{Binding Test_Definition.Title}" ElementStyle="{StaticResource TestTitleStyle}" Width="*"/>
-                <DataGridTextColumn Header="Status" Binding="{Binding status_cd, Converter={StaticResource TestStatusConverter}}"/>
-                <DataGridTextColumn Header="Start" Binding="{Binding start_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}"/>
-                <DataGridTextColumn Header="End" Binding="{Binding end_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}" />
-                <DataGridTextColumn Header="Steps" Binding="{Binding NumSteps}" />
-                <DataGridTextColumn Header="Completed" Binding="{Binding LastStep}" />
-                <DataGridTemplateColumn Header="Tracking">
+                <DataGridTextColumn x:Name="colCandidate" Header="Candidate" Binding="{Binding Candidate.personal_code}" ElementStyle="{StaticResource CandidateStyle}"/>
+                <DataGridTextColumn x:Name="colTitle" Header="Test Type" Binding="{Binding Test_Definition.Title}" ElementStyle="{StaticResource TestTitleStyle}" Width="*"/>
+                <DataGridTextColumn x:Name="colStatus" Header="Status" Binding="{Binding status_cd, Converter={StaticResource TestStatusConverter}}"/>
+                <DataGridTextColumn x:Name="colStart" Header="Start" Binding="{Binding start_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}"/>
+                <DataGridTextColumn x:Name="colEnd" Header="End" Binding="{Binding end_time, StringFormat=\{0:dd.MM.yyyy HH:mm\}}"/>
+                <DataGridTextColumn x:Name="colNumSteps" Header="Steps" Binding="{Binding NumSteps}" ElementStyle="{StaticResource CenteredStyle}"/>
+                <DataGridTextColumn x:Name="colLastStep" Header="Completed" Binding="{Binding LastStep}" ElementStyle="{StaticResource CenteredStyle}"/>
+                <DataGridTemplateColumn x:Name="colTracking" Header="Tracking">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding HasTracking, Mode=OneWay}" HorizontalAlignment="Center"/>
+                            <CheckBox IsChecked="{Binding HasTracking, Mode=OneWay}" IsHitTestVisible="False" HorizontalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

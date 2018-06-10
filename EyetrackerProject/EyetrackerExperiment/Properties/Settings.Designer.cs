@@ -61,7 +61,7 @@ namespace EyetrackerExperiment.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("D:\\\\data\\\\openDoor")]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\data\\openDoor")]
         public string TrackingPathLocal {
             get {
                 return ((string)(this["TrackingPathLocal"]));

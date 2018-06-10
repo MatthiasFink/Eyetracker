@@ -1,0 +1,51 @@
+﻿<Window x:Class="EyetrackerExperiment.TrackingViewer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EyetrackerExperiment"
+        mc:Ignorable="d"
+        Title="Tracking Viewer" Height="372" Width="766" WindowState="Maximized" >
+    <Window.Resources>
+        <RoutedUICommand x:Key="NextSlide" />
+        <RoutedUICommand x:Key="PrevSlide" />
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource NextSlide}" Executed="goNextSlide"/>
+        <CommandBinding Command="{StaticResource PrevSlide}" Executed="goPrevSlide"/>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="Right" Command="{StaticResource NextSlide}"/>
+        <KeyBinding Key="Left" Command="{StaticResource PrevSlide}"/>
+    </Window.InputBindings>
+    <DockPanel LastChildFill="True">
+        <Grid Height="30" DockPanel.Dock="Bottom" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+            <Button BorderBrush="Transparent" Command="{StaticResource PrevSlide}" Background="Transparent" BorderThickness="0">
+                <Viewbox Stretch="UniformToFill">
+                    <Canvas Width="20" Height="20">
+                        <Path Fill="#FFBCBE00" Data="M 2 10 17 3 17 17 3 10 Z" StrokeThickness="2" Stroke="#FF676809"/>
+                    </Canvas>
+                </Viewbox>
+            </Button>
+            <Button Grid.Column="3" BorderBrush="Transparent" BorderThickness="0" Background="Transparent" Command="{StaticResource NextSlide}">
+                <Viewbox Stretch="UniformToFill">
+                    <Canvas Width="20" Height="20">
+                        <Path Fill="#FFBCBE00" Data="M 17 10 3 3 3 17 17 10 Z" StrokeThickness="2" Stroke="#FF676809" StrokeLineJoin="Round"/>
+                    </Canvas>
+                </Viewbox>
+            </Button>
+            <TextBox Grid.Column="1" x:Name="tbSlideNum" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Background="Transparent" BorderThickness="0"/>
+        </Grid>
+        <Canvas x:Name="SlideView">
+            <Canvas.Background>
+                <ImageBrush x:Name="CurrentSlide" ImageSource="Resources/bpm.jpg" Stretch="Uniform"/>
+            </Canvas.Background>
+            <Path x:Name="Track" Stroke="#C0BCBE00" Data="M 10 10 20 10 20 20 10 20 10 10 Z" UseLayoutRounding="True"/>
+        </Canvas>
+    </DockPanel>
+</Window>
