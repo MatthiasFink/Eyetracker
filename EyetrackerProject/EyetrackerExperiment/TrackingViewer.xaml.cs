@@ -20,8 +20,18 @@ namespace EyetrackerExperiment
     /// </summary>
     public partial class TrackingViewer : Window
     {
+        private EyetrackerEntities db = new EyetrackerEntities(EyetrackerEntities.BuildConnString());
         private Test test;
-        public Test Test { get { return test; } set { test = value; SlideNum = Test.Test_Definition.Slide.Min(s => s.num); } }
+        public Test Test
+        {
+            get { return test; }
+            set
+            {
+                test = db.Test.FirstOrDefault(t => t.id == value.id);
+                SlideNum = test.Test_Definition.Slide.Min(s => s.num);
+            }
+        }
+
         private int slideNum;
         public int SlideNum { get { return slideNum; }
             set
@@ -33,7 +43,7 @@ namespace EyetrackerExperiment
                 tbSlideNum.Text = String.Format("Slide {0} of {1}", slideNum, Test.Test_Definition.Slide.Count);
 
                 Track.Data = null;
-                if (Test.Tracking.Count(t => t.Slide == slide) > 0)
+                if (test.Tracking.FirstOrDefault(t => t.Slide == slide) != null)
                 {
                     PathFigure figure = new PathFigure();
                     Point max = new Point() { X=0, Y=0};
@@ -41,6 +51,7 @@ namespace EyetrackerExperiment
 
                     foreach (Tracking tracking in Test.Tracking.Where(t => t.Slide == slide).OrderBy(t => t.occurred))
                     {
+                        /*
                         if (tracking.x == 0 && tracking.y == 0)
                             continue;
 
@@ -55,19 +66,16 @@ namespace EyetrackerExperiment
                             figure.StartPoint = p;
                         else
                             figure.Segments.Add(new LineSegment(p, true));
+                        */
+                        if (tracking.por_x == 0 && tracking.por_y == 0)
+                            continue;
+
+                        Point p = new Point() { X = (double)tracking.por_x, Y = (double)tracking.por_y };
+                        if (figure.StartPoint.X == 0 && figure.StartPoint.Y == 0)
+                            figure.StartPoint = p;
+                        else
+                            figure.Segments.Add(new LineSegment(p, true));
                     }
-                    Point scale = new Point(
-                        SlideView.ActualWidth * 0.9 / (max.X - min.X),
-                        SlideView.ActualHeight * 0.7 / (max.Y - min.Y));
-
-                    MatrixTransform m = new MatrixTransform(
-                        scale.X, 0,
-                        0, scale.Y,
-                        -min.X * scale.X * 0.95, -min.Y * scale.Y * 0.9);
-
-                    figure.StartPoint = m.Transform(figure.StartPoint);
-                    foreach (PathSegment ps in figure.Segments)
-                        ((LineSegment)ps).Point = m.Transform(((LineSegment)ps).Point);
 
                     PathGeometry geo = new PathGeometry();
                     geo.Figures.Add(figure);

@@ -16,10 +16,13 @@ namespace EyetrackerExperiment.EyeTracking
         public Test Test;
         private EyetrackerEntities db;
 
-        public TrackingReader(EyetrackerEntities Db, Test Test = null)
+        public TrackingReader(Test Test = null)
         {
-            db = Db;
-            this.Test = Test;
+            db = new EyetrackerEntities(EyetrackerEntities.BuildConnString());
+            if (Test != null)
+            {
+                this.Test = db.Test.FirstOrDefault(t => t.id == Test.id);
+            }
         }
 
         public enum ReturnCodes
@@ -44,7 +47,7 @@ namespace EyetrackerExperiment.EyeTracking
             "Test already contains tracking data for the corresponding slide"
         };
 
-        public static String ReturnCodeMsg(int returnCode)
+        public static String getReturnCodeMsg(int returnCode)
         {
             returnCode = 1 - returnCode;
             if (returnCode > 0 && returnCode < returnCodeMsgs.Count())
@@ -86,7 +89,7 @@ namespace EyetrackerExperiment.EyeTracking
             if (slideAnswer == null)
                 return (int)ReturnCodes.MalformedFileName;
 
-            if (Test.Tracking.Count(t => t.Slide == slideAnswer.Slide) > 0)
+            if (Test.Tracking.FirstOrDefault(t => t.Slide == slideAnswer.Slide) != null)
             {
                 if (mergeReplace)
                 {
@@ -110,7 +113,7 @@ namespace EyetrackerExperiment.EyeTracking
         {
             int numWritten = 0;
             IdfFile idfFile = new IdfFile(stream);
-            IdfHeader header = idfFile.readHeader();
+            int result = idfFile.readHeader();
             IdfData data = new IdfData();
 
             long time;
@@ -118,17 +121,17 @@ namespace EyetrackerExperiment.EyeTracking
 
             for (int rec = 0; rec < idfFile.Count(); rec++)
             {
-                int result = idfFile.readData(rec, ref data);
+                result = idfFile.readData(rec, ref data);
 
-                if (data.marker != 0x53)
-                    Console.WriteLine("Record {0}; Non SMP marker {1} encountered ", rec, data.marker);
+                if (result < 0)
+                    Console.WriteLine("Record {0}; Non SMP marker encountered ", rec);
                 if (data.rPupX < 0.0 || data.rPupX > 300.0)
                     Console.WriteLine("Record {0}: rPupX value {1} outside expected range", rec, data.rPupX);
                 if (data.rPupY < 0.0 || data.rPupX > 300.0)
                     Console.WriteLine("Record {0}: rPupX value {1} outside expected range", rec, data.rPupX);
-                if (data.rPupDX < 0.0 || data.rPupDX > 8.0)
+                if (data.rPupDX < 0.0 || data.rPupDX > 15.0)
                     Console.WriteLine("Record {0}: rPupDX value {1} outside expected range", rec, data.rPupX);
-                if (data.rPupDX < 0.0 || data.rPupDX > 8.0)
+                if (data.rPupDX < 0.0 || data.rPupDX > 15.0)
                     Console.WriteLine("Record {0}: rPupDX value {1} outside expected range", rec, data.rPupX);
 
 
@@ -150,14 +153,22 @@ namespace EyetrackerExperiment.EyeTracking
                 tracking.timing = 0;
                 tracking.trigger = 0;
                 tracking.Slide = slideAnswer.Slide;
-                tracking.Test = Test;
+                tracking.Test = slideAnswer.Test;
                 Test.Tracking.Add(tracking);
 
                 numWritten++;
             }
+
             db.Tracking.AddRange(Test.Tracking);
+
             db.SaveChanges();
-            Test.Tracking.Clear();
+            /*
+            foreach (Tracking t in Test.Tracking.ToArray())
+            {
+                db.Entry(t).State = System.Data.Entity.EntityState.Detached;
+            }
+            */
+
             return numWritten;
         }
 

@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("EyetrackerExperiment")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Ventum Consulting")]
 [assembly: AssemblyProduct("EyetrackerExperiment")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]

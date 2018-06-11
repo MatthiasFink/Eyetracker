@@ -7,7 +7,7 @@
       <Diagram DiagramId="56c1c4fc8bd846ccbab290d3b7cecdae" Name="Diagram1">
         <EntityTypeShape EntityType="EyetrackerModel.Answer" Width="1.5" PointX="9.625" PointY="8.5" IsExpanded="true" />
         <EntityTypeShape EntityType="EyetrackerModel.Candidate" Width="1.5" PointX="7.625" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="EyetrackerModel.Choice" Width="1.5" PointX="7.625" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="EyetrackerModel.Choice" Width="1.5" PointX="7.625" PointY="8.625" IsExpanded="true" />
         <EntityTypeShape EntityType="EyetrackerModel.Question" Width="1.5" PointX="5.25" PointY="8.75" IsExpanded="true" />
         <EntityTypeShape EntityType="EyetrackerModel.Questionnaire" Width="1.5" PointX="3" PointY="9" IsExpanded="true" />
         <EntityTypeShape EntityType="EyetrackerModel.Settings" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
@@ -30,12 +30,13 @@
         <AssociationConnector Association="EyetrackerModel.FK_Tracking_Slide" ManuallyRouted="false" />
         <AssociationConnector Association="EyetrackerModel.FK_Slide_Answer_Slide_Choice" ManuallyRouted="false" />
         <AssociationConnector Association="EyetrackerModel.FK_Slide_Answer_Test" ManuallyRouted="true" >
-          <ConnectorPoint PointX="9.125" PointY="7.8185196314102576" />
-          <ConnectorPoint PointX="10.457161325423744" PointY="7.8185196314102567" />
-          <ConnectorPoint PointX="10.623827992090412" PointY="7.8185196314102576" />
-          <ConnectorPoint PointX="11.71875" PointY="7.8185196314102576" />
-          <ConnectorPoint PointX="11.71875" PointY="14.095338879471303" />
-          <ConnectorPoint PointX="9.625" PointY="14.095338879471303" />
+          <ConnectorPoint PointX="8.343748" PointY="8.2109993489583335" />
+          <ConnectorPoint PointX="8.343748" PointY="8.4609993489583335" />
+          <ConnectorPoint PointX="9.375" PointY="8.4609993489583335" />
+          <ConnectorPoint PointX="9.375" PointY="13" />
+          <ConnectorPoint PointX="9.875" PointY="13" />
+          <ConnectorPoint PointX="9.875" PointY="14.720896809895834" />
+          <ConnectorPoint PointX="9.625" PointY="14.720896809895834" />
         </AssociationConnector>
         <AssociationConnector Association="EyetrackerModel.FK_Test_Test_Definition" ManuallyRouted="false" />
         <AssociationConnector Association="EyetrackerModel.FK_Tracking_Test" ManuallyRouted="false" />

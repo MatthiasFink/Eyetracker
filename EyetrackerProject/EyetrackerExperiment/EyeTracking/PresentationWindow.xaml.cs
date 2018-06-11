@@ -185,10 +185,10 @@ namespace EyetrackerExperiment.EyeTracking
                 shortCuts = "";
                 foreach (String s in slides[slideNum].Slide_Choice.Select(sc => sc.shortcut))
                     shortCuts += s.ToUpper();
+                eyeTracker.ClearTracking();
+                eyeTracker.StartTracking();
+                showFixationScreen();
             }
-            eyeTracker.ClearTracking();
-            eyeTracker.StartTracking();
-            showFixationScreen();
             return true;
         }
 

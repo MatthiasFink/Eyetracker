@@ -332,17 +332,19 @@ namespace EyetrackerExperiment
             if (fileNames != null)
             {
                 LoggingStatus.PostMessage(Severity.Info, String.Format("Examining {0} tracking files...", fileNames.Count()));
-                TrackingReader trackingReader = new TrackingReader(db, test);
+                TrackingReader trackingReader = new TrackingReader(test);
                 foreach (String fileName in fileNames)
                 {
                     LoggingStatus.PostMessage(Severity.Info, String.Format("Trying to load {0}...", fileName));
+                    Cursor = Cursors.Wait;
                     int numSamples = trackingReader.Read(fileName, mergeReplace);
+                    Cursor = Cursors.Arrow;
                     if (numSamples > 0)
                         LoggingStatus.PostMessage(Severity.Info, String.Format("Successfully loaded {0} samples from {1} into database.", numSamples, fileName));
                     else if (numSamples == 0)
                         LoggingStatus.PostMessage(Severity.Warning, String.Format("No samples found in {0}.", fileName));
                     else
-                        LoggingStatus.PostMessage(Severity.Error, String.Format("Loading of file {0} failed: {1}.", fileName, TrackingReader.ReturnCodeMsg(numSamples)));
+                        LoggingStatus.PostMessage(Severity.Error, String.Format("Loading of file {0} failed: {1}.", fileName, TrackingReader.getReturnCodeMsg(numSamples)));
                 }
             }
 
@@ -353,7 +355,7 @@ namespace EyetrackerExperiment
         {
             int loaded = 0;
 
-            TrackingReader trackingReader = new TrackingReader(db);
+            TrackingReader trackingReader = new TrackingReader();
 
             // LoggingStatus.PostMessage(Severity.Info, String.Format("Scanning files in {0}...", path));
 
@@ -405,7 +407,7 @@ namespace EyetrackerExperiment
                     else if (numSamples == 0)
                         LoggingStatus.PostMessage(Severity.Warning, String.Format("No samples found in {0}.", fileName + extension));
                     else
-                        LoggingStatus.PostMessage(Severity.Error, String.Format("Loading of file {0} failed: {1}.", fileName + extension, TrackingReader.ReturnCodeMsg(numSamples)));
+                        LoggingStatus.PostMessage(Severity.Error, String.Format("Loading of file {0} failed: {1}.", fileName + extension, TrackingReader.getReturnCodeMsg(numSamples)));
                 }
             }
             catch (System.UnauthorizedAccessException)

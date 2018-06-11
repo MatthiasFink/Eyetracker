@@ -159,7 +159,7 @@ namespace Data
             }
         }
 
-        public bool HasTracking { get { return Tracking.FirstOrDefault() != null; } }
+        public bool HasTracking { get { return EyetrackerEntities.EyeTrackerDB.Tracking.FirstOrDefault(t => t.test_id == this.id) != null; } }
 
         public bool ShowDetails { get; set; }
     }
