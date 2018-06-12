@@ -32,6 +32,16 @@ namespace EyetrackerExperiment
         public String Detail { get; set; }
     }
 
+    public static class ExtensionMethods
+    {
+        private static Action EmptyDelegate = delegate () { };
+
+        public static void Refresh(this UIElement uiElement)
+        {
+            uiElement.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Render, EmptyDelegate);
+        }
+    }
+
     public class IconVisibilityConverter : IValueConverter
     {
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -69,6 +79,7 @@ namespace EyetrackerExperiment
             if (statusMessages.Count > keepMax)
                 statusMessages.Remove(statusMessages.Last());
             cbStatusList.SelectedIndex = 0;
+            cbStatusList.Refresh();
         }
 
         public LoggingStatus()

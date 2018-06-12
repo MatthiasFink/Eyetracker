@@ -1,8 +1,11 @@
 ﻿using Data;
 using EyetrackerExperiment.EyeTracking;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Ribbon;
@@ -17,10 +20,13 @@ namespace EyetrackerExperiment
     public partial class MainWindow : RibbonWindow
     {
         public EyetrackerEntities db;
- 
+
         public MainWindow()
         {
             InitializeComponent();
+
+            LoadTrackingWorker.DoWork += LoadTracking;
+            LoadTrackingWorker.RunWorkerCompleted += LoadTrackingCompleted;
 
             db = EyetrackerEntities.EyeTrackerDB;
 
@@ -82,10 +88,11 @@ namespace EyetrackerExperiment
         private void DeleteTest(object sender, RoutedEventArgs e)
         {
             Test test = (Test)gridTests.SelectedItem;
+            Candidate candidate = test.Candidate;
             if (test == null) return;
 
             if (MessageBox.Show(String.Format(
-                "Really delete Test \"{0}\" for {1} with {2} steps completed out of {3}?", 
+                "Really delete Test \"{0}\" for {1} with {2} steps completed out of {3}?",
                 test.Test_Definition.Title,
                 test.Candidate.personal_code,
                 test.LastStep,
@@ -93,11 +100,23 @@ namespace EyetrackerExperiment
             {
                 db.Answer.RemoveRange(test.Answer);
                 db.Slide_Answer.RemoveRange(test.Slide_Answer);
-                db.Tracking.RemoveRange(test.Tracking);
+                db.Database.ExecuteSqlCommand("delete from tracking where test_id = {0}", test.id);
                 db.Test.Remove(test);
                 db.Tests.Remove(test);
                 db.SaveChanges();
             }
+            if (candidate.Test.FirstOrDefault() == null)
+            {
+                if (MessageBox.Show(String.Format(
+                    "Candidate {0} has no other tests planned or performed. Delete candidate?",
+                    candidate.personal_code), "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    db.Candidate.Remove(candidate);
+                    db.SaveChanges();
+                }
+
+            }
+
         }
 
         private void DeleteLastStep(object sender, RoutedEventArgs e)
@@ -107,10 +126,9 @@ namespace EyetrackerExperiment
 
             if (test.Test_Definition.EyeTrackerStep == test.LastStep)
             {
-                db.Slide_Answer.RemoveRange(test.Slide_Answer);
-                test.Slide_Answer.Clear();
-                db.Tracking.RemoveRange(test.Tracking);
-                test.Tracking.Clear();
+                db.Slide_Answer.RemoveRange(db.Slide_Answer.Where(sa => sa.test_id == test.id));
+                db.Database.ExecuteSqlCommand("delete from tracking where test_id={0}", test.id);
+                db.SaveChanges();
             }
             else
             {
@@ -226,7 +244,7 @@ namespace EyetrackerExperiment
                         ((RibbonMenuItem)m).IsChecked = false;
 
             if (FilterNEW.IsChecked || FilterPRG.IsChecked || FilterTRM.IsChecked || FilterNEWPRG.IsChecked ||
-                FilterS1.IsChecked || FilterS2.IsChecked || FilterS3.IsChecked || 
+                FilterS1.IsChecked || FilterS2.IsChecked || FilterS3.IsChecked ||
                 FilterTY.IsChecked || FilterTN.IsChecked)
                 rbsFilter.LargeImageSource = new BitmapImage(new Uri("Resources/FilterOff32.png", UriKind.Relative));
             else
@@ -298,6 +316,7 @@ namespace EyetrackerExperiment
 
         private void bnImportTrackingCurrent_Click(object sender, RoutedEventArgs e)
         {
+            if (LoadTrackingWorker.IsBusy) return;
             Test test = (Test)gridTests.SelectedItem;
             if (test == null) return;
             if (test.LastStep < test.Test_Definition.EyeTrackerStep)
@@ -332,33 +351,84 @@ namespace EyetrackerExperiment
             if (fileNames != null)
             {
                 LoggingStatus.PostMessage(Severity.Info, String.Format("Examining {0} tracking files...", fileNames.Count()));
-                TrackingReader trackingReader = new TrackingReader(test);
-                foreach (String fileName in fileNames)
-                {
-                    LoggingStatus.PostMessage(Severity.Info, String.Format("Trying to load {0}...", fileName));
-                    Cursor = Cursors.Wait;
-                    int numSamples = trackingReader.Read(fileName, mergeReplace);
-                    Cursor = Cursors.Arrow;
-                    if (numSamples > 0)
-                        LoggingStatus.PostMessage(Severity.Info, String.Format("Successfully loaded {0} samples from {1} into database.", numSamples, fileName));
-                    else if (numSamples == 0)
-                        LoggingStatus.PostMessage(Severity.Warning, String.Format("No samples found in {0}.", fileName));
-                    else
-                        LoggingStatus.PostMessage(Severity.Error, String.Format("Loading of file {0} failed: {1}.", fileName, TrackingReader.getReturnCodeMsg(numSamples)));
-                }
+                LoadFilesArgument arg = new LoadFilesArgument() { test = test, mergeReplace = mergeReplace };
+                arg.fileNames.AddRange(fileNames);
+                List<LoadFilesArgument> args = new List<LoadFilesArgument>();
+                args.Add(arg);
+                LoadTrackingWorker.RunWorkerAsync(args);
             }
-
         }
 
 
-        private int ScanForMissingTracking(String path)
+        private void bnImportTrackingMissing_Click(object sender, RoutedEventArgs e)
         {
-            int loaded = 0;
+            if (LoadTrackingWorker.IsBusy) return;
+            Properties.Settings settings = new Properties.Settings();
+            String path = settings.TrackingPathRemote;
+            path = Configuration.FileDialogs.SelectFolder(path);
 
-            TrackingReader trackingReader = new TrackingReader();
 
-            // LoggingStatus.PostMessage(Severity.Info, String.Format("Scanning files in {0}...", path));
+            if (path == null)
+                return;
 
+            LoggingStatus.PostMessage(Severity.Info, String.Format("Scanning directory {0} and all subdirectories for missing tracking data...", path));
+            List<LoadFilesArgument> args = new List<LoadFilesArgument>();
+            ScanForMissingTracking(path, args);
+            int numTests = args.Count;
+            int numFiles = args.Sum(a => a.fileNames.Count);
+            if (numFiles > 0)
+            {
+                LoggingStatus.PostMessage(Severity.Info, String.Format("Found total of {0} files related to {1} different tests.", numFiles, numTests));
+                LoadTrackingWorker.RunWorkerAsync(args);
+            }
+            else
+                LoggingStatus.PostMessage(Severity.Info, "No suitable tracking files identified.");
+        }
+
+        private class LoadFilesArgument
+        {
+            public Test test;
+            public List<String> fileNames = new List<string>();
+            public bool mergeReplace;
+        }
+
+        private readonly BackgroundWorker LoadTrackingWorker = new BackgroundWorker();
+
+        private void LoadTrackingCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            EyetrackerExperiment.App app = (EyetrackerExperiment.App)App.Current;
+            app.Log(Severity.Info, String.Format("Total of {0} files loaded successfully...", (int)e.Result));
+        }
+
+        private void LoadTracking(object sender, DoWorkEventArgs e)
+        {
+            EyetrackerExperiment.App app = (EyetrackerExperiment.App)App.Current;
+            List<LoadFilesArgument> args = (List<LoadFilesArgument>)e.Argument;
+            int numFilesLoaded = 0;
+            foreach (LoadFilesArgument arg in args)
+            {
+                TrackingReader trackingReader = new TrackingReader(arg.test);
+                foreach (String fileName in arg.fileNames)
+                {
+                    app.Log(Severity.Info, String.Format("Trying to load {0}...", fileName));
+                    int numSamples = trackingReader.Read(fileName, arg.mergeReplace);
+                    if (numSamples > 0)
+                    {
+                        app.Log(Severity.Info, String.Format("Successfully loaded {0} samples from {1} into database.", numSamples, fileName));
+                        numFilesLoaded++;
+                    }
+                    else if (numSamples == 0)
+                        app.Log(Severity.Warning, String.Format("No samples found in {0}.", fileName));
+                    else
+                        app.Log(Severity.Error, String.Format("Loading of file {0} failed: {1}.", fileName, TrackingReader.getReturnCodeMsg(numSamples)));
+                }
+            }
+            e.Result = numFilesLoaded;
+        }
+
+        private void ScanForMissingTracking(String path, List<LoadFilesArgument> args)
+        {
+            LoggingStatus.PostMessage(Severity.Info, String.Format("Scanning files in {0}...", path));
             try
             {
                 foreach (String filePath in Directory.GetFiles(path))
@@ -396,18 +466,13 @@ namespace EyetrackerExperiment
                         LoggingStatus.PostMessage(Severity.Warning, String.Format("Encountered file {0} but could not find corresponding answer for slide {1} in test.", fileName + extension, slideNum));
                         continue;
                     }
-
-                    trackingReader.Test = test;
-                    int numSamples = trackingReader.Read(filePath, false);
-                    if (numSamples > 0)
+                    LoadFilesArgument arg = args.FirstOrDefault(a => a.test.id == test.id);
+                    if (arg == null)
                     {
-                        LoggingStatus.PostMessage(Severity.Info, String.Format("Successfully loaded {0} samples from {1} into database.", numSamples, fileName + extension));
-                        loaded++;
+                        arg = new LoadFilesArgument() { test = test, mergeReplace=false };
+                        args.Add(arg);
                     }
-                    else if (numSamples == 0)
-                        LoggingStatus.PostMessage(Severity.Warning, String.Format("No samples found in {0}.", fileName + extension));
-                    else
-                        LoggingStatus.PostMessage(Severity.Error, String.Format("Loading of file {0} failed: {1}.", fileName + extension, TrackingReader.getReturnCodeMsg(numSamples)));
+                    arg.fileNames.Add(filePath);
                 }
             }
             catch (System.UnauthorizedAccessException)
@@ -416,28 +481,10 @@ namespace EyetrackerExperiment
             try
             {
                 foreach (String subDir in Directory.GetDirectories(path))
-                    loaded += ScanForMissingTracking(subDir);
+                    ScanForMissingTracking(subDir, args);
             }
             catch (System.UnauthorizedAccessException)
             { }
-
-            return loaded;
         }
-
-        private void bnImportTrackingMissing_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings settings = new Properties.Settings();
-            String path = settings.TrackingPathRemote;
-            path = Configuration.FileDialogs.SelectFolder(path);
-            
-
-            if (path == null)
-                return;
-
-            LoggingStatus.PostMessage(Severity.Info, String.Format("Scanning directory {0} and all subdirectories for missing tracking data...", path));
-            int numLoaded = ScanForMissingTracking(path);
-            LoggingStatus.PostMessage(Severity.Info, String.Format("Scan complete, loaded total of {0} tracking files into database.", numLoaded));
-        }
-
     }
 }

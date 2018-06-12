@@ -24,12 +24,15 @@ namespace EyetrackerExperiment
 
         public void Log(Severity severity, String message, String detail = null)
         {
-            if (MainWindow != null && MainWindow.IsLoaded)
+            Dispatcher.Invoke(delegate ()
             {
-                EyetrackerExperiment.MainWindow mainWindow = (EyetrackerExperiment.MainWindow)MainWindow;
+                if (MainWindow != null && MainWindow.IsLoaded)
+                {
+                    EyetrackerExperiment.MainWindow mainWindow = (EyetrackerExperiment.MainWindow)MainWindow;
 
-                mainWindow.Dispatcher.Invoke(new Action(() => mainWindow.LoggingStatus.PostMessage(severity, message, detail)));
-            }
+                    mainWindow.Dispatcher.Invoke(new Action(() => mainWindow.LoggingStatus.PostMessage(severity, message, detail)));
+                }
+            }, System.Windows.Threading.DispatcherPriority.Render);
         }
     }
 }

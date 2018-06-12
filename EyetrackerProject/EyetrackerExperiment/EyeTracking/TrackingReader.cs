@@ -49,7 +49,7 @@ namespace EyetrackerExperiment.EyeTracking
 
         public static String getReturnCodeMsg(int returnCode)
         {
-            returnCode = 1 - returnCode;
+            returnCode = -1 - returnCode;
             if (returnCode > 0 && returnCode < returnCodeMsgs.Count())
                 return returnCodeMsgs[returnCode];
             else
@@ -89,11 +89,12 @@ namespace EyetrackerExperiment.EyeTracking
             if (slideAnswer == null)
                 return (int)ReturnCodes.MalformedFileName;
 
-            if (Test.Tracking.FirstOrDefault(t => t.Slide == slideAnswer.Slide) != null)
+            if (db.Tracking.FirstOrDefault(t => t.test_id == Test.id && t.slide_id == slideAnswer.slide_id) != null)
             {
                 if (mergeReplace)
                 {
-                    db.Tracking.RemoveRange(Test.Tracking.Where(t => t.Slide == slideAnswer.Slide));
+                    db.SaveChanges();
+                    db.Database.ExecuteSqlCommand("delete from tracking where test_id = {0} and slide_id = {1}", Test.id, slideAnswer.slide_id);
                 }
                 else return (int)ReturnCodes.DataPresent;
             }
@@ -118,7 +119,8 @@ namespace EyetrackerExperiment.EyeTracking
 
             long time;
             long timeOffset = -1;
-
+            List<Tracking> trackings = new List<Tracking>();
+            Tracking tracking = null;
             for (int rec = 0; rec < idfFile.Count(); rec++)
             {
                 result = idfFile.readData(rec, ref data);
@@ -139,35 +141,31 @@ namespace EyetrackerExperiment.EyeTracking
                     timeOffset = data.time;
 
                 time = data.time - timeOffset;
-
-                Tracking tracking = new Tracking();
-                tracking.occurred = slideAnswer.slide_start_time.Value.AddSeconds(time / 1000000.0);
-                tracking.x = (decimal)data.rPupX;
-                tracking.y = (decimal)data.rPupY;
-                tracking.dia_x = (decimal)data.rPupDX;
-                tracking.dia_y = (decimal)data.rPupDY;
-                tracking.cr_x = (decimal)data.rCr0X;
-                tracking.cr_y = (decimal)data.rCr0Y;
-                tracking.por_x = (decimal)data.rGX;
-                tracking.por_y = (decimal)data.rGY;
-                tracking.timing = 0;
-                tracking.trigger = 0;
-                tracking.Slide = slideAnswer.Slide;
-                tracking.Test = slideAnswer.Test;
-                Test.Tracking.Add(tracking);
-
-                numWritten++;
+                DateTime occurred = slideAnswer.slide_start_time.Value.AddSeconds(time / 1000000.0);
+                if (tracking == null || !tracking.occurred.Equals(occurred))
+                {
+                    tracking = new Tracking();
+                    tracking.occurred = slideAnswer.slide_start_time.Value.AddSeconds(time / 1000000.0);
+                    tracking.x = (decimal)data.rPupX;
+                    tracking.y = (decimal)data.rPupY;
+                    tracking.dia_x = (decimal)data.rPupDX;
+                    tracking.dia_y = (decimal)data.rPupDY;
+                    tracking.cr_x = (decimal)data.rCr0X;
+                    tracking.cr_y = (decimal)data.rCr0Y;
+                    tracking.por_x = (decimal)data.rGX;
+                    tracking.por_y = (decimal)data.rGY;
+                    tracking.timing = 0;
+                    tracking.trigger = 0;
+                    tracking.Slide = slideAnswer.Slide;
+                    tracking.Test = slideAnswer.Test;
+                    trackings.Add(tracking);
+                    numWritten++;
+                }
             }
 
-            db.Tracking.AddRange(Test.Tracking);
+            db.Tracking.AddRange(trackings);
 
             db.SaveChanges();
-            /*
-            foreach (Tracking t in Test.Tracking.ToArray())
-            {
-                db.Entry(t).State = System.Data.Entity.EntityState.Detached;
-            }
-            */
 
             return numWritten;
         }
