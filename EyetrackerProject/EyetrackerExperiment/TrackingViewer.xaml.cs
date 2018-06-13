@@ -39,7 +39,7 @@ namespace EyetrackerExperiment
                 Slide slide = test.Test_Definition.Slide.FirstOrDefault(s => s.num == value);
                 if (slide == null) return;
                 slideNum = value;
-                CurrentSlide.ImageSource = slide.SlideBitmapImage;
+                CurrentSlide.Source = slide.SlideBitmapImage;
                 tbSlideNum.Text = String.Format("Slide {0} of {1}", slideNum, Test.Test_Definition.Slide.Count);
 
                 Track.Data = null;
@@ -51,22 +51,9 @@ namespace EyetrackerExperiment
 
                     foreach (Tracking tracking in Test.Tracking.Where(t => t.Slide == slide).OrderBy(t => t.occurred))
                     {
-                        /*
                         if (tracking.x == 0 && tracking.y == 0)
                             continue;
 
-                        Point p = new Point() { X = (double)tracking.x, Y = (double)tracking.y };
-
-                        if (p.X < min.X) min.X = p.X;
-                        if (p.Y < min.Y) min.Y = p.Y;
-                        if (p.X > max.X) max.X = p.X;
-                        if (p.Y > max.Y) max.Y = p.Y;
-
-                        if (figure.StartPoint.X == 0 && figure.StartPoint.Y == 0)
-                            figure.StartPoint = p;
-                        else
-                            figure.Segments.Add(new LineSegment(p, true));
-                        */
                         if (tracking.por_x == 0 && tracking.por_y == 0)
                             continue;
 

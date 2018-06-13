@@ -41,11 +41,11 @@
             </Button>
             <TextBox Grid.Column="1" x:Name="tbSlideNum" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Background="Transparent" BorderThickness="0"/>
         </Grid>
-        <Canvas x:Name="SlideView">
-            <Canvas.Background>
-                <ImageBrush x:Name="CurrentSlide" ImageSource="Resources/bpm.jpg" Stretch="Uniform"/>
-            </Canvas.Background>
-            <Path x:Name="Track" Stroke="#C0BCBE00" Data="M 10 10 20 10 20 20 10 20 10 10 Z" UseLayoutRounding="True"/>
-        </Canvas>
+        <Grid>
+            <Image x:Name="CurrentSlide" Source="Resources/bpm.jpg" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Width="{Binding ActualWidth, ElementName=CurrentSlide, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=CurrentSlide, Mode=OneWay}">
+                <Path x:Name="Track" Stroke="#C0BCBE00" Data="M 10 10 20 10 20 20 10 20 10 10 Z"/>
+            </Viewbox>
+        </Grid>
     </DockPanel>
 </Window>
