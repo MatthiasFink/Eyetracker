@@ -141,7 +141,15 @@ namespace Data
 
     public partial class Test
     {
-        public int NumSteps { get { return Test_Definition.Questionnaire.Count() + (Test_Definition.Slide.Count > 0 ? 1 : 0); } }
+        public int NumSteps
+        {
+            get
+            {
+                return Test_Definition == null ? 0 : 
+                    (Test_Definition.Questionnaire == null ? 0 : Test_Definition.Questionnaire.Count()) + 
+                    (Test_Definition.Slide == null ? 0 : (Test_Definition.Slide.Count > 0 ? 1 : 0));
+            }
+        }
         
         public List<Step> Steps
         {

@@ -136,7 +136,7 @@ namespace EyetrackerExperiment
                 if (qu != null)
                 {
                     db.Answer.RemoveRange(test.Answer);
-                    test.Answer.Clear();
+                    //test.Answer.Clear();
                 }
             }
             test.LastStep -= 1;
