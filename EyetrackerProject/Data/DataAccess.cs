@@ -89,21 +89,28 @@ namespace Data
 
         public void LoadAllCandidatesAndTests()
         {
+
             Tests.Clear();
             Candidates.Clear();
             TestDefinitions.Clear();
 
             Test_Definition.Load();
             Candidate.Load();
+            Test.Load();
 
             foreach (Test_Definition td in Test_Definition)
                 TestDefinitions.Add(td);
+
 
             foreach (Candidate c in Candidate)
             {
                 Candidates.Add(c);
                 foreach (Test t in c.Test)
+                {
                     Tests.Add(t);
+                    if (t.Test_Definition == null && t.test_definition_id > 0)
+                        t.Test_Definition = db.Test_Definition.FirstOrDefault(td => td.Id == t.test_definition_id);
+                }
             }
         }
 

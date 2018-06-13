@@ -76,7 +76,7 @@ namespace EyetrackerExperiment
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             String code = personalCode.Text;
-            if (code == null || code.Length != 10 || code.Contains('?'))
+            if (code == null || code.Length < 9 || code.Contains('?'))
                 return;
 
             if (Test.Candidate.gender == null)
@@ -84,6 +84,8 @@ namespace EyetrackerExperiment
 
             if (Test.Test_Definition == null)
                 return;
+            else
+                Test.test_definition_id = Test.Test_Definition.Id;
 
             foreach (AgeRange a in EyetrackerEntities.ageRanges)
             {
@@ -99,13 +101,16 @@ namespace EyetrackerExperiment
             else
             {
                 Test.Candidate.personal_code = code;
-                Db.Candidate.Add(Test.Candidate);
-                Db.Candidates.Add(Test.Candidate);
+                // Db.Candidate.Add(Test.Candidate);
+                // Db.Candidates.Add(Test.Candidate);
             }
+
             Test.status_cd = "NEW";
             Db.Test.Add(Test);
             Db.Tests.Add(Test);
+
             Db.SaveChanges();
+
             DialogResult = true;
             Close();
         }
